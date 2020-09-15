@@ -1,0 +1,20 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #555666;
+}
+li {
+    list-style: none;
+    display: inline-block;
+}
+img {
+    border: 0;
+    outline: none;
+}
+
+
+
