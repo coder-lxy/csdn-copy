@@ -5,9 +5,8 @@
 
 a {
     text-decoration: none;
-    color: #555666;
 }
-li {
+li , dl, dd, dt{
     list-style: none;
     display: inline-block;
 }

@@ -2,62 +2,8 @@
   <div class="csdn-nav-second">
     <div class="nav-com">
       <ul>
-        <li class="nav-com-li active">
-            <a href="" class="current">推荐</a>
-        </li>
-        <li class="nav-com-li">
-            <a href="">动态</a>
-        </li>
-        <li class="nav-com-li">
-            <a href="">程序人生</a>
-        </li>
-        <li class="nav-com-li">
-            <a href="">Python</a>
-        </li>
-        <li class="nav-com-li">
-            <a href="">Java</a>
-        </li>
-        <li class="nav-com-li">
-            <a href="">百万人学AI</a>
-        </li>
-        <li class="nav-com-li">
-            <a href="">前端</a>
-        </li>
-        <li class="nav-com-li">
-            <a href="">架构</a>
-        </li>
-        <li class="nav-com-li">
-            <a href="">区块链</a>
-        </li>
-        <li class="nav-com-li">
-            <a href="">数据库</a>
-        </li>
-        <li class="nav-com-li">
-            <a href="">5G</a>
-        </li>
-        <li class="nav-com-li">
-            <a href="">游戏开发</a>
-        </li>
-        <li class="nav-com-li">
-            <a href="">移动开发</a>
-        </li>
-        <li class="nav-com-li">
-            <a href="">运维</a>
-        </li>
-        <li class="nav-com-li">
-            <a href="">安全</a>
-        </li>
-        <li class="nav-com-li">
-            <a href="">云计算/大数据</a>
-        </li>
-        <li class="nav-com-li">
-            <a href="">研发管理</a>
-        </li>
-        <li class="nav-com-li">
-            <a href="">物联网</a>
-        </li>
-        <li class="nav-com-li">
-            <a href="">计算机基础</a>
+        <li v-for = "(item,index) in navLists" :key="index" class="nav-com-li" :class="{active: index==currentIndex}">
+            <a href="" class="current">{{item}}</a>
         </li>
       </ul>
     </div>
@@ -65,12 +11,18 @@
 </template>
 
 <script>
-export default {};
+export default {
+    data() {
+        return{
+            navLists:['推荐','动态','程序人生','Python','Java','百万人学AI','前端','架构','区块链','数据库','5G','游戏开发','移动开发','运维','安全','云计算/大数据','研发管理','物联网','计算机基础'],
+            currentIndex:0
+        }
+    }
+};
 </script>
 
 <style>
 .csdn-nav-second {
-  float: left;
   width: 96px;
   background-color: #fff;
   margin-right: 12px;
