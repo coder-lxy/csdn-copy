@@ -129,8 +129,13 @@
             </ul>
           </div>
         </li>
-        <li class="userinfo">
-          <a href>登录/注册</a>
+        <li v-show="!isLogin" @click="login" class="userinfo">
+          <a href="javascript:;">登录/注册</a>
+        </li>
+        <li v-show="isLogin" class="user-login">
+          <a href="javascript:;">
+            <img :src="currentUser.headUrl" alt="" />
+          </a>
         </li>
       </ul>
     </div>
@@ -139,7 +144,22 @@
 
 <script>
 // import logo from "../assets/logo.png "
-export default {};
+export default {
+  props: {
+    isLogin: false,
+    currentUser: {},
+  },
+  methods: {
+    login() {
+      this.$router.push({
+        path: "/login",
+        // query:''
+      });
+      console.log(this.isLogin);
+      console.log(this.currentUser);
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -260,7 +280,7 @@ export default {};
   line-height: 44px;
   color: #333;
 }
-.csdn-nav-bar .container .nav-right-menu>li {
+.csdn-nav-bar .container .nav-right-menu > li {
   float: left;
   padding: 0 8px;
 }
@@ -315,14 +335,14 @@ export default {};
 .csdn-nav-bar .container .nav-right-menu .msg {
   position: relative;
 }
-.csdn-nav-bar .container .nav-right-menu .msg:hover .msgList{
+.csdn-nav-bar .container .nav-right-menu .msg:hover .msgList {
   display: block;
 }
 .csdn-nav-bar .container .nav-right-menu .msg i {
   background: url(../assets/message.png) no-repeat;
   background-size: contain;
 }
-.csdn-nav-bar .container .nav-right-menu .msg  .msgList {
+.csdn-nav-bar .container .nav-right-menu .msg .msgList {
   display: none;
   min-width: 120px;
   line-height: 1.5em;
@@ -334,14 +354,14 @@ export default {};
   transform: translateX(-50%);
   font-size: 12px;
   border-radius: 3px;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
   z-index: 99999;
 }
-.csdn-nav-bar .container .nav-right-menu .msg  .msgList li {
+.csdn-nav-bar .container .nav-right-menu .msg .msgList li {
   display: block;
   text-align: left;
 }
-.csdn-nav-bar .container .nav-right-menu .msg  .msgList li a {
+.csdn-nav-bar .container .nav-right-menu .msg .msgList li a {
   display: inline-block;
   padding-left: 32px;
   height: 40px;
@@ -349,14 +369,23 @@ export default {};
   color: #555666;
   line-height: 40px;
 }
-.csdn-nav-bar .container .nav-right-menu .msg  .msgList li:hover {
+.csdn-nav-bar .container .nav-right-menu .msg .msgList li:hover {
   background-color: #f0f0f5;
 }
-.csdn-nav-bar .container .nav-right-menu .msg  .msgList li a em {
+.csdn-nav-bar .container .nav-right-menu .msg .msgList li a em {
   display: inline-block;
   margin-left: 8px;
   font-style: normal;
   color: #e33e33;
   font-weight: 400;
+}
+.csdn-nav-bar .container .nav-right-menu .user-login {
+  text-align: center;
+}
+.csdn-nav-bar .container .nav-right-menu .user-login img {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background-color: #eee;
 }
 </style>

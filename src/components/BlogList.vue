@@ -1,14 +1,19 @@
 <template>
   <ul class="blog-list">
-    <li v-for="(item,index) in blogList" :key="index" class="list-item">
+    <li
+      v-for="(item, index) in blogList"
+      :key="index"
+      @click="toDetail(item.blog.blogId)"
+      class="list-item"
+    >
       <div class="list-con">
         <div class="title">
           <h2>
-            <a href>{{item.blog.title}}</a>
+            <a href="javascript:;">{{ item.blog.title }}</a>
           </h2>
-          <div class="close-tag">
+          <!-- <div class="close-tag">
             <i>x</i>
-          </div>
+          </div>-->
         </div>
         <dl class="list-userbar">
           <dt>
@@ -17,23 +22,23 @@
             </a>
           </dt>
           <dd class="name">
-            <a href="#">{{item.user.username}}</a>
+            <a href="#">{{ item.user.username }}</a>
           </dd>
-          <div class="summary">{{item.blog.summary}}</div>
+          <div class="summary">{{ item.blog.summary }}</div>
           <div class="interactive">
-            <a href class="click-heart">
-              <span class="icon like"></span>
-              <span class="num">{{item.blog.likeCount}}</span>
+            <a href="javascript:;" @click.stop="change($event,index)" :class="{active:isActive[index]}"  class="click-heart">
+              <Icon type="like"></Icon>
+              <span class="num">{{ item.blog.likeCount }}</span>
             </a>
             <div class="interval"></div>
-            <a href class="read-num">
-              <span class="icon hit"></span>
-              <span class="num">{{item.blog.hitCount}}</span>
+            <a href="javascript:;" class="read-num">
+              <Icon type="hit"></Icon>
+              <span class="num">{{ item.blog.hitCount }}</span>
             </a>
             <div class="interval"></div>
-            <a href class="read-num">
-              <span class="icon comment"></span>
-              <span class="num">{{item.blog.commentCount}}</span>
+            <a href="javascript:;"  class="comment">
+              <Icon  type="comment"></Icon>
+              <span class="num">{{ item.blog.commentCount }}</span>
             </a>
             <span></span>
           </div>
@@ -44,23 +49,39 @@
 </template>
 
 <script>
+import Icon from "./Icon";
 import axios from "axios";
 export default {
+  props: {
+    blogList: {},
+  },
   data() {
     return {
-      blogList: [],
+      blogId: null,
+      isActive:[]
     };
   },
-  mounted() {
-    axios.get("http://192.168.137.65:8080").then((response) => {
-      this.blogList = response.data;
-      console.log(this.blogList);
-    });
+  components: {
+    Icon,
+  },
+  methods: {
+    toDetail(id) {
+      this.$router.push({
+        path: "/detail",
+        query: {
+          id: id,
+        },
+      });
+    },
+    change(index) {
+      this.isActive[index]=!this.isActive
+    }
   },
 };
 </script>
 
 <style scoped>
+@import "//at.alicdn.com/t/font_2080474_2hyrrf0l6mk.css";
 .blog-list {
   width: 760px;
 }
@@ -71,14 +92,21 @@ export default {
   background-color: #fff;
   border-bottom: 1px solid #f4f4f4;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+}
+.blog-list li:hover {
+  background-color: #fafafa;
 }
 .blog-list li .list-con .title h2 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   line-height: 24px;
   margin-bottom: 4px;
   overflow: hidden;
   white-space: nowrap;
+}
+.blog-list li .list-con .title h2 a:hover {
+  color: #ca0c16;
 }
 .blog-list li .list-con .title h2 a {
   max-width: 98%;
@@ -90,7 +118,7 @@ export default {
   overflow: hidden;
   white-space: nowrap;
 }
-.blog-list li .list-con .title .close-tag {
+/* .blog-list li .list-con .title .close-tag {
   position: absolute;
   display: inline-block;
   right: 24px;
@@ -103,6 +131,9 @@ export default {
   width: 14px;
   height: 14px;
 }
+.blog-list li .list-con .title .close-tag i:hover {
+  color: #666;
+} */
 .blog-list li .list-con .list-userbar {
   height: 24px;
   line-height: 24px;
@@ -120,19 +151,22 @@ export default {
 }
 .blog-list li .list-con .list-userbar dd {
   float: left;
-  font-size: 14px;
+  font-size: 12px;
   color: #8a8a8a;
   line-height: 24px;
 }
 .blog-list li .list-con .list-userbar dd a {
   color: #3d3d3d;
 }
+.blog-list li .list-con .list-userbar dd a:hover {
+  color: #157dcf;
+}
 .blog-list li .list-con .list-userbar .summary {
   padding-left: 16px;
   flex: 40;
   margin-bottom: 4px;
   color: #8a8a8a;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 24px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -142,21 +176,24 @@ export default {
   display: flex;
   justify-content: flex-end;
 }
+.blog-list li .list-con .list-userbar .interactive a {
+  font-size: 12px;
+  color: #999;
+  text-align: center;
+}
+.blog-list li .list-con .list-userbar .interactive a:hover {
+  color:#157dcf;
+}
+.blog-list li .list-con .list-userbar .interactive .active {
+  color: #ca0c16;
+}
 .blog-list li .list-con .list-userbar .interactive .icon {
   display: inline-block;
   width: 16px;
   height: 16px;
   vertical-align: -3px;
 }
-.blog-list li .list-con .list-userbar .interactive .like {
-  background-image: url(../assets/dianzan.png);
-}
-.blog-list li .list-con .list-userbar .interactive .hit {
-  background-image: url(../assets/hit.png);
-}
-.blog-list li .list-con .list-userbar .interactive .comment {
-  background-image: url(../assets/comment.png);
-}
+
 .blog-list li .list-con .list-userbar .interactive .num {
   color: #8a8a8a;
 }

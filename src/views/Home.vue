@@ -5,7 +5,7 @@
     </div>
     <div class="mainContent clearfix">
       <div class="main">
-      <BlogList />
+        <BlogList :blogList="blogs" />
       </div>
     </div>
     <!-- <NavSecond></NavSecond> -->
@@ -15,10 +15,25 @@
 <script>
 import NavSecond from "../components/NavSecond";
 import BlogList from "../components/BlogList";
+import * as blogServ from "../services/blogService";
 export default {
+  data() {
+    return {
+      blogs: [],
+    };
+  },
   components: {
     BlogList,
     NavSecond,
+  },
+  created() {
+    this.setBlogs();
+  },
+  methods: {
+    async setBlogs() {
+      var resp = await blogServ.getBlogs();
+      this.blogs = resp;
+    },
   },
 };
 </script>
@@ -43,14 +58,14 @@ export default {
   float: right;
 }
 .clearfix:after {
-	content: "";
-	display:block;
-	clear:both;
-	height:0;/*兼容旧浏览器*/
-	visibility:hidden;/*兼容旧浏览器*/
+  content: "";
+  display: block;
+  clear: both;
+  height: 0; /*兼容旧浏览器*/
+  visibility: hidden; /*兼容旧浏览器*/
 }
 .clearfix {
-	*zoom:1;/*兼容IE6~7浏览器*/
+  *zoom: 1; /*兼容IE6~7浏览器*/
 }
 .container .mainContent .main {
   float: left;

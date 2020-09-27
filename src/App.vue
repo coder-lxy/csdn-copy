@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <Nav></Nav>
-
+    <Nav :isLogin="this.$store.state.isLogin" :currentUser="this.$store.state.currentUser"></Nav>
     <div>
       <router-view></router-view>
     </div>

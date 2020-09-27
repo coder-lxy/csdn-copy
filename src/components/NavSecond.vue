@@ -47,7 +47,7 @@ export default {
     width: 100%;
     height: 32px;
     display: block;
-    font-size: 14px;
+    font-size: 12px;
     color: #555666;
     margin-bottom: 1px;
     /* position:relative;

@@ -10,3 +10,13 @@ body {
 *, :after, :before {
     box-sizing: border-box;
 }
+.clearfix:after {
+	content: "";
+	display:block;
+	clear:both;
+	height:0;
+	visibility:hidden;
+}
+.clearfix {
+	*zoom:1;
+}
