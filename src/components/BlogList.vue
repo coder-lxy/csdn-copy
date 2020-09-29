@@ -17,16 +17,16 @@
         </div>
         <dl class="list-userbar">
           <dt>
-            <a href="#">
+            <a href="javascript:;">
               <img :src="item.user.headUrl" alt />
             </a>
           </dt>
           <dd class="name">
-            <a href="#">{{ item.user.username }}</a>
+            <a href="javascript:;">{{ item.user.username }}</a>
           </dd>
           <div class="summary">{{ item.blog.summary }}</div>
           <div class="interactive">
-            <a href="javascript:;" @click.stop="change($event,index)" :class="{active:isActive[index]}"  class="click-heart">
+            <a href="javascript:;" @click.stop="like($event,index)" :class="index === num? 'active' : ''"  class="click-heart">
               <Icon type="like"></Icon>
               <span class="num">{{ item.blog.likeCount }}</span>
             </a>
@@ -58,7 +58,8 @@ export default {
   data() {
     return {
       blogId: null,
-      isActive:[]
+      num:''
+      // isActive:[]
     };
   },
   components: {
@@ -73,8 +74,11 @@ export default {
         },
       });
     },
-    change(index) {
-      this.isActive[index]=!this.isActive
+    change(e,index) {
+      // alert(11)
+      this.num=index
+      console.log(index);
+      console.log(this.num);
     }
   },
 };

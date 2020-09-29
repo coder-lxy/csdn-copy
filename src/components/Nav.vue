@@ -134,8 +134,13 @@
         </li>
         <li v-show="isLogin" class="user-login">
           <a href="javascript:;">
-            <img :src="currentUser.headUrl" alt="" />
+            <img :src="userInfo.headUrl" alt="" />
           </a>
+          <div class="userControl">
+            <div class="logout">
+              <a @click="logout" href="javascript:;">退出</a>
+            </div>
+          </div>
         </li>
       </ul>
     </div>
@@ -147,7 +152,7 @@
 export default {
   props: {
     isLogin: false,
-    currentUser: {},
+    userInfo: {},
   },
   methods: {
     login() {
@@ -157,6 +162,12 @@ export default {
       });
       console.log(this.isLogin);
       console.log(this.currentUser);
+    },
+    logout() {
+      alert(11)
+      localStorage.removeItem("token");
+      this.isLogin = flase;
+      console.log(this.isLogin);
     },
   },
 };
@@ -381,6 +392,12 @@ export default {
 }
 .csdn-nav-bar .container .nav-right-menu .user-login {
   text-align: center;
+}
+.csdn-nav-bar .container .nav-right-menu .user-login a {
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  margin-top: 9px;
 }
 .csdn-nav-bar .container .nav-right-menu .user-login img {
   width: 26px;

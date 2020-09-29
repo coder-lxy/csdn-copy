@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <Nav :isLogin="this.$store.state.isLogin" :currentUser="this.$store.state.currentUser"></Nav>
+    <Nav
+      :isLogin="this.$store.state.isLogin"
+      :userInfo="this.$store.state.userInfo"
+      class="nav"
+    ></Nav>
     <div>
       <router-view></router-view>
     </div>
@@ -17,18 +21,9 @@ export default {
 </script>
 
 <style scoped>
-/* .csdn-nav-bar {
-  width: 100%;
-  height: 44px;
-  padding: 0 24px;
-  font-size: 0.75em;
+/* .nav {
+  position: fixed;
+  top: 0;
+  z-index: 9999;
 } */
-.csdn-toolbar {
-  min-width: 1200px;
-  padding: 0 24px;
-  line-height: 1.5em;
-  color: #333;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
-  background-color: #fff;
-}
 </style>

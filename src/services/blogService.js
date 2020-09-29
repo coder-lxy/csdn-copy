@@ -3,7 +3,7 @@ import { URL } from "./config";
 // 分页获取新闻
 export async function getBlogs() {
   var resp = await axios.get(URL)
-  console.log(resp);
+  // console.log(resp);
   return resp.data;
 }
 export async function getBlog(id) {
@@ -19,10 +19,23 @@ export async function getUserInfo(id) {
 export async function login(data) {
   var resp = await axios.post(URL + "/login/", data)
   console.log(resp);
-  return resp.data;
+  return resp;
+}
+export async function logout(data) {
+  var resp = await axios.post(URL + "/logout/", data)
+  console.log(resp);
+  return resp;
 }
 export async function register(data) {
   var resp = await axios.post(URL + "/register/", data)
+  // console.log(resp);
+  return resp;
+}
+export async function like(id) {
+  var resp = await axios.post(URL + "/like/"+id)
   console.log(resp);
   return resp.data;
 }
+
+
+

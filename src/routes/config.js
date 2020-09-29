@@ -14,6 +14,11 @@ export default {
       path:"/detail",
       name:"BlogDetails",
       component:()=>import("@/views/BlogDetails")
+    },
+    {
+      path:"/userinfo",
+      name:"UserInfo",
+      component:()=>import("@/views/UserInfo")
     }
   ]
 }

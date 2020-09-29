@@ -28,6 +28,7 @@ export default {
   },
   created() {
     this.setBlogs();
+    console.log(this.$store.state.token);
   },
   methods: {
     async setBlogs() {
@@ -43,6 +44,7 @@ export default {
   width: 1180px;
   padding: 12px 0 0;
   margin: 0 auto;
+  /* margin-top: 46px; */
 }
 .container .nav {
   float: left;
@@ -51,7 +53,8 @@ export default {
   margin-right: 12px;
   text-align: center;
   line-height: 32px;
-  position: relative;
+  /* position: fixed;
+  top: 46px; */
 }
 .container .mainContent {
   width: 1072px;

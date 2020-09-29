@@ -4,8 +4,15 @@
       <div class="main-process-login">
         <div class="login-form">
           <div class="head clearfix">
-            <span @click="changeToLogin()" class="login" :class="{active:login}">登录</span>
-            <span @click="changeToReg()" class="reg" :class="{active:!login}">注册</span>
+            <span
+              @click="changeToLogin()"
+              class="login"
+              :class="{ active: login }"
+              >登录</span
+            >
+            <span @click="changeToReg()" class="reg" :class="{ active: !login }"
+              >注册</span
+            >
           </div>
           <div class="content">
             <div v-show="login" class="login-content">
@@ -15,18 +22,40 @@
                 placeholder="账号"
                 class="form-control"
               />
-              <input v-model="userInfo.password" type="password" placeholder="密码" class="form-control" />
+              <input
+                v-model="userInfo.password"
+                type="password"
+                placeholder="密码"
+                class="form-control"
+              />
               <div class="check-box">
-                <input type="checkBox" class="remember" @click="remember()"/>记住密码
+                <input
+                  type="checkBox"
+                  class="remember"
+                  @click="remember()"
+                />记住密码
               </div>
-               <div v-show="this.loginMsg.code===-1" class="tips">{{this.loginMsg.msg}}</div>
-              <button @click="toLogin">登录</button>
-             
+              <div v-show="this.loginMsg.code === -1" class="tips">
+                {{ this.loginMsg.msg }}
+              </div>
+              <button @click="toLogin" :class="username && pwd">登录</button>
             </div>
             <div v-show="!login" class="reg-content">
-              <input  v-model="newUserInfo.username" type="text" placeholder="账号" class="form-control" />
-              <input v-model="newUserInfo.password" type="password" placeholder="密码" class="form-control" />
-               <div v-show="this.regMsg.code===-1" class="tips">{{this.regMsg.msg}}</div>
+              <input
+                v-model="newUserInfo.username"
+                type="text"
+                placeholder="账号"
+                class="form-control"
+              />
+              <input
+                v-model="newUserInfo.password"
+                type="password"
+                placeholder="密码"
+                class="form-control"
+              />
+              <div v-show="this.regMsg.code === -1" class="tips">
+                {{ this.regMsg.msg }}
+              </div>
               <button @click="toRegister">注册</button>
             </div>
           </div>
@@ -39,65 +68,81 @@
 <script>
 import { login } from "../services/blogService";
 import { register } from "../services/blogService";
+import axios from "axios";
+import jwtDecode from "jwt-decode"
+
+
 export default {
   data() {
     return {
-      login:true,
+      login: true,
       userInfo: {
         username: "",
         password: "",
-        rememberme: false,
+        // rememberme: false,
       },
       newUserInfo: {
         username: "",
         password: "",
       },
-      loginMsg:{
-        msg:'',
-        code:''
+      loginMsg: {
+        msg: "",
+        code: "",
       },
-      regMsg:{
-        msg:'',
-        code:''
-      }
+      regMsg: {
+        msg: "",
+        code: "",
+      },
     };
   },
   methods: {
+    // isLogin() {
+    //   // 通过sessionStorage获取vuex里的isLogin的状态
+    //   if (sessionStorage.getItem("")) {
+    //   }
+    // },
     toLogin() {
       login(this.userInfo).then((v) => {
-        this.loginMsg=v;
-        if(this.loginMsg.code===0) {
-          // console.log(v.user);
-          this.$store.state.currentUser=v.user;
-          this.$store.state.isLogin = true
+        console.log(v.data);
+        this.loginMsg = v.data;
+        if (this.loginMsg.code === 0) {
+          this.$store.state.token = v.headers.token;
+          localStorage.setItem("token", v.headers.token);
+          localStorage.setItem("isLogin", true);
+          const decoded = jwtDecode(v.headers.token);
+          localStorage.setItem("userInfo", decoded);
+          // this.$store.state.userInfo = decoded
+          // this.$store.state.isLogin = true
+          // console.log(this.$store.state.userInfo);
+          // console.log(decoded);
           this.$router.push({
-            path:'/',
-          })
+            path: "/",
+          });
         }
       });
     },
     toRegister() {
-        console.log(this.newUserInfo);
+      console.log(this.newUserInfo);
       register(this.newUserInfo).then((v) => {
         console.log(v);
-        this.regMsg=v;
-        if(this.regMsg.code===0) {
+        this.regMsg = v;
+        if (this.regMsg.code === 0) {
           this.$router.push({
-            path:'/',
-          })
+            path: "/",
+          });
         }
       });
     },
     changeToLogin() {
-      this.login=true
+      this.login = true;
     },
     changeToReg() {
-      this.login=false
+      this.login = false;
     },
-    remember(){
+    remember() {
       // console.log(event.target.checked);
-      this.userInfo.rememberme=event.target.checked
-    }
+      this.userInfo.rememberme = event.target.checked;
+    },
   },
 };
 </script>
