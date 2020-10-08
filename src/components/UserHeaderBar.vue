@@ -3,10 +3,10 @@
     <div class="inner">
       <div class="user-left">
         <div class="user-img">
-          <img src="" alt="">
-          <p class="modify-img">上传头像</p>
+          <img :src="imgUrl" alt="" />
+          <span>上传头像</span>
+          <input type="file" class="modify-img" @change="uploadFile($event)" />
         </div>
-        <p></p>
       </div>
       <div class="user-info">
         <p class="user-id"></p>
@@ -16,9 +16,37 @@
 </template>
 
 <script>
+import { uploadImg } from "../services/blogService";
 export default {
-
-}
+  data() {
+    return {
+      imgUrl: this.$store.state.userInfo.headUrl
+    };
+  },
+  created() {
+    
+  },
+  // computed:{
+  //   userInfo() {
+  //     console.log(this.$store.state.userInfo);
+  //     this.userInfo=this.$store.state.userInfo
+  //     return this.$store.state.userInfo
+  //   }
+  // },
+  methods: {
+    //上传图片
+    uploadFile(event) {
+      var file = event.target.files[0]; //获取input的图片file值
+      var formData = new FormData(); // 创建form对象
+      formData.append("file", file); //对应后台接收图片名
+      uploadImg(formData).then((v)=>{
+      console.log(v);
+       this.imgUrl=v.data.msg
+       console.log(this.imgUrl);
+    });
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -44,18 +72,37 @@ export default {
   cursor: pointer;
   border: 1px solid #464646;
 }
+.infoMsgHead .inner .user-left .user-img span {
+  display: none;
+  width: 100%;
+  height: 24px;
+  text-align: center;
+  line-height: 24px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  font-size: 12px;
+  color: #f0f0f5;
+  background: rgba(0, 0, 0, 0.8);
+
+}
+.infoMsgHead .inner .user-left .user-img:hover span {
+  display: block;
+}
 .infoMsgHead .inner .user-left .user-img img {
   width: 100%;
   height: 100%;
 }
-.infoMsgHead .inner .user-left .user-img p {
+.infoMsgHead .inner .user-left .user-img input {
+  filter: alpha(opacity=0);
+  opacity: 0;
   position: absolute;
+  left: 0;
   bottom: 0;
   width: 100%;
   height: 24px;
   line-height: 24px;
   text-align: center;
-  background: rgba(0,0,0,.8);
 }
 .infoMsgHead .inner .user-left p {
   color: #f0f0f5;

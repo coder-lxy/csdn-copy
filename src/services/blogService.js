@@ -31,10 +31,40 @@ export async function register(data) {
   // console.log(resp);
   return resp;
 }
+export async function edit(data) {
+  var resp = await axios.post(URL + "/editormd/", data)
+  console.log(resp);
+  return resp;
+}
 export async function like(id) {
   var resp = await axios.post(URL + "/like/"+id)
   console.log(resp);
   return resp.data;
+}
+export async function renewal() {
+  var resp = await axios.post(URL + "/islogin/")
+  console.log(resp);
+  return resp;
+}
+export async function uploadImg(formData) {
+  var resp = await axios.post(URL + "/uploadImage/", formData)
+  console.log(resp);
+  return resp;
+}
+export async function getClassify(id) {
+  var resp = await axios.post(URL + "/gettype/"+id)
+  console.log(resp);
+  return resp;
+}
+export async function search(msg) {
+  var resp = await axios.get(URL + "/search/"+msg)
+  console.log(resp);
+  return resp;
+}
+export async function publish(msg) {
+  var resp = await axios.post(URL + "/editor/",msg)
+  console.log(resp);
+  return resp;
 }
 
 

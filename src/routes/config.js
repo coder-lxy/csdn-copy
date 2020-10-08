@@ -1,4 +1,5 @@
 export default {
+  mode:"history",
   routes:[
     {
       path:"/",
@@ -19,6 +20,11 @@ export default {
       path:"/userinfo",
       name:"UserInfo",
       component:()=>import("@/views/UserInfo")
+    },
+    {
+      path:"/editor",
+      name:"Editor",
+      component:()=>import("@/views/Editor")
     }
   ]
 }

@@ -56,8 +56,14 @@
           </div>
         </li>
         <div class="serch-bar">
-          <input type="text" class="input-search" placeholder="搜CSDN" />
-          <a href class="btn-search">
+          <input
+            type="text"
+            v-model="msg"
+            class="input-search"
+            placeholder="搜CSDN"
+            @keyup.enter="toSearch(msg)"
+          />
+          <a @click="toSearch(msg)" class="btn-search">
             <img src="../assets/csdn-sou.png" alt />
           </a>
         </div>
@@ -68,6 +74,11 @@
             <i class="csdn-write"></i>
             <span>创作中心</span>
           </a>
+          <div class="write-blog">
+            <a @click="toWrite()" class="write-link" href="javascript:;"
+              >写博客</a
+            >
+          </div>
         </li>
         <li class="collection">
           <a href title="我的收藏">
@@ -134,7 +145,7 @@
         </li>
         <li v-show="isLogin" class="user-login">
           <a href="javascript:;">
-            <img :src="userInfo.headUrl" alt="" />
+            <img @click="toProfile()" :src="userInfo.headUrl" alt="" />
           </a>
           <div class="userControl">
             <div class="logout">
@@ -154,6 +165,12 @@ export default {
     isLogin: false,
     userInfo: {},
   },
+  data() {
+    return {
+      msg: "",
+      searchList: {},
+    };
+  },
   methods: {
     login() {
       this.$router.push({
@@ -164,10 +181,22 @@ export default {
       console.log(this.currentUser);
     },
     logout() {
-      alert(11)
       localStorage.removeItem("token");
       this.isLogin = flase;
       console.log(this.isLogin);
+    },
+    toWrite() {
+      this.$router.push({
+        path: "/editor",
+      });
+    },
+    toProfile() {
+      this.$router.push({
+        path: "/userinfo",
+      });
+    },
+    toSearch(msg) {
+      this.$emit("setSearchKey", msg);
     },
   },
 };
@@ -299,6 +328,30 @@ export default {
   height: 100%;
   /* border: 1px solid #eee; */
 }
+.csdn-nav-bar .container .nav-right-menu .write-bolg-btn .write-blog {
+  display: none;
+  min-height: 48px;
+  width: 92px;
+  position: absolute;
+  top: 32px;
+  background: #fff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  padding: 6px 0;
+}
+.csdn-nav-bar .container .nav-right-menu .write-bolg-btn .write-blog a {
+  height: 36px;
+  width: 92px;
+  font-style: 12px;
+  color: rgba(85, 86, 102, 1);
+  line-height: 36px;
+  background: #fff;
+}
+.csdn-nav-bar .container .nav-right-menu .write-bolg-btn .write-blog a:hover {
+  background: rgba(240, 240, 245, 1);
+}
+.csdn-nav-bar .container .nav-right-menu .write-bolg-btn:hover .write-blog {
+  display: block;
+}
 .csdn-nav-bar .container .nav-right-menu li a {
   display: inline-block;
   text-align: center;
@@ -391,6 +444,7 @@ export default {
   font-weight: 400;
 }
 .csdn-nav-bar .container .nav-right-menu .user-login {
+  position: relative;
   text-align: center;
 }
 .csdn-nav-bar .container .nav-right-menu .user-login a {
@@ -404,5 +458,15 @@ export default {
   height: 26px;
   border-radius: 50%;
   background-color: #eee;
+}
+.csdn-nav-bar .container .nav-right-menu .user-login .userControl {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  top: 40px;
+  left: 0;
+}
+.csdn-nav-bar .container .nav-right-menu .user-login:hover .userControl {
+  display: block;
 }
 </style>

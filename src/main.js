@@ -5,24 +5,37 @@ import "./assets/style/global.css"
 import router from "./routes/index"
 import store from "./store/index"
 import axios from "axios";
+import jwtDecode from "jwt-decode"
+import { renewal } from "./services/blogService"
+
 Vue.config.productionTip = false
 //允许携带cookie 跨域访问关键
 //axios.defaults.withCredentials = true
 // http response 响应拦截器
+var isLock = false
 axios.interceptors.request.use(config => {
   //登录成功后将后台返回的TOKEN在本地存下来,每次请求从sessionStorage中拿到存储的TOKEN值 
+  var expirTime = 60480000
+  // var expirTime = 5000
+  var startTime = localStorage.getItem("startTime")
+  var endTime = Date.now()
+  if ((endTime - startTime) > expirTime) {
+    if (!isLock) {
+      isLock = true
+      renewal()
+    }
+    // console.log(renewal());
+  }
   let token = localStorage.getItem('token');
-  // let userInfo = JSON.parse(localStorage.getItem("userInfo"));
-  let isLogin = localStorage.getItem('isLogin');
-  console.log(token);
   if (token) {
+    config.headers.token = token
     //如果请求时TOKEN存在,就为每次请求的headers中设置好TOKEN,后台根据headers中的TOKEN判断是否放行 
     //config.headers['token'] = localStorage.token;
-    store.state.isLogin=isLogin;
-    // store.state.userInfo=userInfo;
-    // console.log(store.state.userInfo);
-    // console.log(localStorage.getItem('userInfo'));
-    config.headers.token = token
+    const decoded = jwtDecode(token);
+    store.state.token = token
+    store.state.userInfo = decoded
+    localStorage.setItem('userInfo',JSON.stringify(decoded))
+    store.state.isLogin = true;
   }
   return config;
 }, error => {
@@ -36,7 +49,7 @@ axios.interceptors.response.use(response => {
   // console.log(response);
   if (response.data.code == -1) {
     router.push({
-      path: 'login'
+      path: '/login'
     })
   }
 
@@ -44,6 +57,9 @@ axios.interceptors.response.use(response => {
   if (token) {
     //如果请求时TOKEN存在,就为每次请求的headers中设置好TOKEN,后台根据headers中的TOKEN判断是否放行 
     localStorage.setItem('token', token)
+    // console.log(token);
+
+    // localStorage.setItem("userInfo", decoded);
   }
   return response;
 }, error => {

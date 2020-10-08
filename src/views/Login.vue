@@ -28,17 +28,16 @@
                 placeholder="密码"
                 class="form-control"
               />
-              <div class="check-box">
-                <input
-                  type="checkBox"
-                  class="remember"
-                  @click="remember()"
-                />记住密码
-              </div>
               <div v-show="this.loginMsg.code === -1" class="tips">
                 {{ this.loginMsg.msg }}
               </div>
-              <button @click="toLogin" :class="username && pwd">登录</button>
+              <button
+                :disabled="userInfo.username == '' || userInfo.password == ''"
+                @click="toLogin"
+                :class="{ active: userInfo.username && userInfo.password }"
+              >
+                登录
+              </button>
             </div>
             <div v-show="!login" class="reg-content">
               <input
@@ -56,7 +55,7 @@
               <div v-show="this.regMsg.code === -1" class="tips">
                 {{ this.regMsg.msg }}
               </div>
-              <button @click="toRegister">注册</button>
+              <button @click="toRegister" :class="{ active: newUserInfo.username && newUserInfo.password }">注册</button>
             </div>
           </div>
         </div>
@@ -69,7 +68,7 @@
 import { login } from "../services/blogService";
 import { register } from "../services/blogService";
 import axios from "axios";
-import jwtDecode from "jwt-decode"
+// import jwtDecode from "jwt-decode"
 
 
 export default {
@@ -96,25 +95,14 @@ export default {
     };
   },
   methods: {
-    // isLogin() {
-    //   // 通过sessionStorage获取vuex里的isLogin的状态
-    //   if (sessionStorage.getItem("")) {
-    //   }
-    // },
     toLogin() {
       login(this.userInfo).then((v) => {
         console.log(v.data);
         this.loginMsg = v.data;
         if (this.loginMsg.code === 0) {
-          this.$store.state.token = v.headers.token;
-          localStorage.setItem("token", v.headers.token);
-          localStorage.setItem("isLogin", true);
-          const decoded = jwtDecode(v.headers.token);
-          localStorage.setItem("userInfo", decoded);
-          // this.$store.state.userInfo = decoded
-          // this.$store.state.isLogin = true
-          // console.log(this.$store.state.userInfo);
-          // console.log(decoded);
+          var startTime = Date.now();
+          localStorage.setItem("startTime", startTime);
+          console.log(startTime);
           this.$router.push({
             path: "/",
           });
@@ -138,10 +126,6 @@ export default {
     },
     changeToReg() {
       this.login = false;
-    },
-    remember() {
-      // console.log(event.target.checked);
-      this.userInfo.rememberme = event.target.checked;
     },
   },
 };
@@ -212,6 +196,10 @@ export default {
 }
 .main .main-process-login .content button:hover {
   color: #c2c2c2;
+}
+.main .main-process-login .content button.active {
+  background-color: #ca0c16;
+  color: fff;
 }
 .main .main-process-login .content .login-content .check-box {
   text-align: end;

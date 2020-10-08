@@ -16,6 +16,7 @@
 import NavSecond from "../components/NavSecond";
 import BlogList from "../components/BlogList";
 import * as blogServ from "../services/blogService";
+import { search } from "../services/blogService";
 export default {
   data() {
     return {
@@ -29,6 +30,33 @@ export default {
   created() {
     this.setBlogs();
     console.log(this.$store.state.token);
+    // console.log();
+  },
+  methods:{
+    toSearch() {
+      search().then(v=>{
+        console.log(v);
+      })
+    }
+  },
+  computed: {
+    getSearchKey() {
+      return this.$store.state.searchKey;
+    },
+  },
+  watch: {
+    getSearchKey: {
+      deep:true,
+      handler(val){
+        // console.log(val);
+        search(val).then(v=>{
+          // console.log(v);
+          this.blogs=v.data
+        })
+        // this.toSearch(newValue)
+      }
+      
+    },
   },
   methods: {
     async setBlogs() {

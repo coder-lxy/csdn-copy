@@ -3,13 +3,13 @@
     <li
       v-for="(item, index) in blogList"
       :key="index"
-      @click="toDetail(item.blog.blogId)"
+      @click="toDetail(item.blogId)"
       class="list-item"
     >
       <div class="list-con">
         <div class="title">
           <h2>
-            <a href="javascript:;">{{ item.blog.title }}</a>
+            <a href="javascript:;">{{ item.title }}</a>
           </h2>
           <!-- <div class="close-tag">
             <i>x</i>
@@ -18,27 +18,27 @@
         <dl class="list-userbar">
           <dt>
             <a href="javascript:;">
-              <img :src="item.user.headUrl" alt />
+              <img :src="item.headUrl" alt />
             </a>
           </dt>
           <dd class="name">
-            <a href="javascript:;">{{ item.user.username }}</a>
+            <a href="javascript:;">{{ item.username }}</a>
           </dd>
-          <div class="summary">{{ item.blog.summary }}</div>
+          <div class="summary">{{ item.summary }}</div>
           <div class="interactive">
-            <a href="javascript:;" @click.stop="like($event,index)" :class="index === num? 'active' : ''"  class="click-heart">
+            <a href="javascript:;" @click.stop="beLike($event, index, item.blog.blogId)"  class="click-heart">
               <Icon type="like"></Icon>
-              <span class="num">{{ item.blog.likeCount }}</span>
+              <span class="num">{{ item.likeCount }}</span>
             </a>
             <div class="interval"></div>
             <a href="javascript:;" class="read-num">
               <Icon type="hit"></Icon>
-              <span class="num">{{ item.blog.hitCount }}</span>
+              <span class="num">{{ item.hitCount }}</span>
             </a>
             <div class="interval"></div>
             <a href="javascript:;"  class="comment">
               <Icon  type="comment"></Icon>
-              <span class="num">{{ item.blog.commentCount }}</span>
+              <span class="num">{{ item.commentCount }}</span>
             </a>
             <span></span>
           </div>
@@ -50,7 +50,7 @@
 
 <script>
 import Icon from "./Icon";
-import axios from "axios";
+import {like} from "../services/blogService"
 export default {
   props: {
     blogList: {},
@@ -58,8 +58,6 @@ export default {
   data() {
     return {
       blogId: null,
-      num:''
-      // isActive:[]
     };
   },
   components: {
@@ -74,11 +72,9 @@ export default {
         },
       });
     },
-    change(e,index) {
-      // alert(11)
-      this.num=index
-      console.log(index);
-      console.log(this.num);
+    beLike(e,index,id) {
+      this.isLike[index]=true;
+      like(id); 
     }
   },
 };

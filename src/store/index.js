@@ -6,13 +6,21 @@ var store = new Vuex.Store({
     token:'',
     userInfo:'',
     isLogin:false,
+    searchKey:''
   },
   mutations:{
     // 存储token方法
     // 设置token等于外部传递进来的值
     setToken(state,token) {
       state.token = token
-      localStorage.token = token // 同步存储token至localStorage
+      localStorage.setItem('token',token) // 同步存储token至localStorage
+    },
+    setUserInfo(state,userInfo) {
+      localStorage.setItem('userInfo',JSON.stringify(userInfo))
+      state.userInfo=userInfo
+    },
+    changeSearchKey(state,value){
+      state.searchKey = value
     }
   },
   getters:{
@@ -24,6 +32,11 @@ var store = new Vuex.Store({
       }
       return state
     }
+  },
+  actions: {                 //推荐使用的异步修改数据仓库
+    setSearchKey(context,value){   
+      context.commit('changeSearchKey',value)
+   }
   }
 
 });

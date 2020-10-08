@@ -3,7 +3,7 @@
     <Nav
       :isLogin="this.$store.state.isLogin"
       :userInfo="this.$store.state.userInfo"
-      class="nav"
+      @setSearchKey="goSearch"
     ></Nav>
     <div>
       <router-view></router-view>
@@ -17,6 +17,16 @@ export default {
   components: {
     Nav,
   },
+  created() {
+    this.$store.state.userInfo=JSON.parse(localStorage.getItem('userInfo'))
+    
+  },
+  methods:{
+    goSearch(msg){
+      this.$store.dispatch('setSearchKey', msg)
+      console.log(this.$store.state.searchKey);
+    }
+  }
 };
 </script>
 
