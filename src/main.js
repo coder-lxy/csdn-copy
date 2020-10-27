@@ -24,7 +24,6 @@ axios.interceptors.request.use(config => {
       isLock = true
       renewal()
     }
-    // console.log(renewal());
   }
   let token = localStorage.getItem('token');
   if (token) {
@@ -32,10 +31,10 @@ axios.interceptors.request.use(config => {
     //如果请求时TOKEN存在,就为每次请求的headers中设置好TOKEN,后台根据headers中的TOKEN判断是否放行 
     //config.headers['token'] = localStorage.token;
     const decoded = jwtDecode(token);
-    store.state.token = token
-    store.state.userInfo = decoded
     localStorage.setItem('userInfo',JSON.stringify(decoded))
-    store.state.isLogin = true;
+    store.commit('setToken',token)
+    store.commit('setUserInfo',decoded)
+    store.commit('changeIsLogin',true)
   }
   return config;
 }, error => {
@@ -57,9 +56,6 @@ axios.interceptors.response.use(response => {
   if (token) {
     //如果请求时TOKEN存在,就为每次请求的headers中设置好TOKEN,后台根据headers中的TOKEN判断是否放行 
     localStorage.setItem('token', token)
-    // console.log(token);
-
-    // localStorage.setItem("userInfo", decoded);
   }
   return response;
 }, error => {

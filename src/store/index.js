@@ -4,9 +4,20 @@ Vue.use(Vuex);
 var store = new Vuex.Store({
   state:{
     token:'',
-    userInfo:'',
+    userInfo:{},
     isLogin:false,
-    searchKey:''
+    searchKey:'',
+    blogListIndex:0
+  },
+  getters:{
+    // 获取token方法
+    // 判断是否有token,如果没有重新赋值，返回给state的token
+    getToken(state) {
+      if(!state.token) {
+        state.token = localStorage.getItem('token')
+      }
+      return state.token
+    }
   },
   mutations:{
     // 存储token方法
@@ -19,24 +30,24 @@ var store = new Vuex.Store({
       localStorage.setItem('userInfo',JSON.stringify(userInfo))
       state.userInfo=userInfo
     },
+    changeIsLogin(state, isLogin) {
+      state.isLogin=isLogin
+    },
     changeSearchKey(state,value){
       state.searchKey = value
+    },
+    changeBlogListIndex(state,value) {
+      state.blogListIndex=value
     }
   },
-  getters:{
-    // 获取token方法
-    // 判断是否有token,如果没有重新赋值，返回给state的token
-    getToken(state) {
-      if(!state.token) {
-        state.token = localStorage.getItem('token')
-      }
-      return state
-    }
-  },
+  
   actions: {                 //推荐使用的异步修改数据仓库
     setSearchKey(context,value){   
       context.commit('changeSearchKey',value)
-   }
+   },
+  //  setBlogListIndex(context,value) {
+  //    context.commit('changeBlogListIndex',value)
+  //  }
   }
 
 });

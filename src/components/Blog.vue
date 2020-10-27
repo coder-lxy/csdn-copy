@@ -2,14 +2,14 @@
   <div class="blog-content-box">
     <div class="article-header-box">
       <div class="article-title-box">
-        <h1>{{blog.blog.title}}</h1>
+        <h1>{{blog.title}}</h1>
       </div>
       <div class="article-info-box">
         <div class="bar-content">
-          <a href class="nickname">{{blog.user.username}}</a>
-          <span class="time">{{blog.blog.createDate}}</span>
+          <a href class="nickname">{{blog.username}}</a>
+          <span class="time">{{blog.createDate}}</span>
           <img src="../assets/articleReadEyes.png" alt class="article-read-img" />
-          <span class="read-count">{{blog.blog.hitCount}}</span>
+          <span class="read-count">{{blog.hitCount}}</span>
           <a href class="collection">
             <img src="../assets/tobarCollect.png" alt="" class="un-collect" />
             <img src alt class="collect" />
@@ -18,16 +18,16 @@
         </div>
       </div>
     </div>
-    <div v-html="blog.blog.article" class="article-content">
+    <div v-html="blog.article" class="article-content">
     </div>
     <div class="more-toolbox">
       <ul class="toolbox-list">
         <li class="tool-item">
-          <a href="">
+          <a href="javascript:;" @click="beLike(blog.blogId)">
             <img style="display:none" class="like-imgActive" src="../assets/tobarThumbUpactive.png" alt="">
             <img class="like-img" src="../assets/tobarThumbUp.png" alt="">
-            <span class="name">点赞</span>
-            <span class="count">{{blog.blog.likeCount}}</span>
+            <span class="name" >点赞</span>
+            <span class="count">{{blog.likeCount}}</span>
           </a>
         </li>
         <li class="tool-item">
@@ -35,7 +35,7 @@
             <img style="display:none" class="like-imgActive" src="../assets/tobarThumbUpactive.png" alt="">
             <img class="like-img" src="../assets/tobarComment.png" alt="">
             <span class="name">评论</span>
-            <span class="count">{{blog.blog.commentCount}}</span>
+            <span class="count">{{blog.commentCount}}</span>
           </a>
         </li>
         <li class="tool-item">
@@ -52,19 +52,25 @@
 </template>
 
 <script>
+import { like } from '../services/blogService';
 export default {
   props: {
     blog: {},
   },
+  methods:{
+    beLike(id) {
+      like(id)
+    }
+  }
 };
 </script>
 
 <style scoped>
 .blog-content-box {
-  width: 800px;
   position: relative;
   padding: 0 24px 16px;
   background: #fff;
+  margin-bottom: 10px;
 }
 .blog-content-box .article-header-box {
   padding-top: 8px;
@@ -129,14 +135,13 @@ export default {
   padding-bottom: 48px;
 }
 .blog-content-box .more-toolbox {
-  width: 860px;
+  width: 100%;
   position: absolute;
   left: 0;
-  bottom: -38px;
-  margin-bottom: 8px;
+  bottom: 0;
 }
 .blog-content-box .more-toolbox ul {
-  width: 800px;
+  /* width: 1010px; */
   height: 38px;
   line-height: 38px;
   display: flex;

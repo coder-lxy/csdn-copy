@@ -1,72 +1,69 @@
 <template>
-  <div class="container clearfix">
-    <div class="aside clearfix">
-      <AsideProfile :userInfo="userInfo"/>
-    </div>
-    <div class="main clearfix">
+  <div class="container">
+    <AsideProfile :userInfo="userInfo" class="aside" />
+    <div class="main">
       <Blog :blog="blog" />
+      <Comment :blogId="blog.blogId" :comments="comments"></Comment>
     </div>
   </div>
 </template>
 
 <script>
 import Blog from "../components/Blog";
-import { getBlog } from "../services/blogService";
-import {getUserInfo} from "../services/blogService"
+import { getBlog, getComment } from "../services/blogService";
+import { getUserInfo } from "../services/blogService";
 import AsideProfile from "../components/AsideProfile";
+import Comment from "../components/Comment";
 export default {
   data() {
     return {
       blog: {},
       // userId: "",
-      userInfo:{}
+      userInfo: {},
+      comments:{}
     };
   },
   components: {
     Blog,
     AsideProfile,
+    Comment,
   },
   created() {
-    // console.log(this.$route.query.id);
+    console.log(this.$route.query.id);
     getBlog(this.$route.query.id).then((v) => {
-      console.log(v);
-      this.blog = v;
-      getUserInfo(this.blog.user.userId).then((v)=>{
+      // console.log(v.data);
+      this.blog = v.data;
+      // console.log(this.blog.userId);
+      getUserInfo(this.blog.userId).then((v) => {
         console.log(v);
-        this.userInfo=v
-      })
-      // this.userId=this.blog.user.userId;
-      // console.log(this.userId);
+        this.userInfo = v.data;
+      });
     });
-    getUserInfo(this.userId).then((v)=>{
-      console.log(v);
-      this.userInfo=v
-    })
+    getComment(this.$route.query.id).then((v) => {
+      // console.log(v.data);
+      this.comments=v.data
+      console.log(this.comments);
+    });
   },
 };
 </script>
 
 <style scoped>
-.container {
-  width: 1070px;
-  margin: 0 auto;
-}
+/* .container {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+} */
 .aside {
-  width: 260px;
-  float: left;
+  float: right;
+  width: 300px;
+  margin-top: 6px;
+  margin-right: 46px;
 }
 .main {
-  margin-bottom: 40px;
   float: right;
+  width: 1010px;
+  margin-bottom: 40px;
+  margin-right: 20px;
 }
-/* .clearfix:after {
-	content: "";
-	display:block;
-	clear:both;
-	height:0;
-	visibility:hidden;
-} */
-/* .clearfix {
-	*zoom:1;
-} */
 </style>

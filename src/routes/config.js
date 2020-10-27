@@ -25,6 +25,11 @@ export default {
       path:"/editor",
       name:"Editor",
       component:()=>import("@/views/Editor")
-    }
+    },
+    {
+      path: "*", // 匹配所有路径
+      name:"NotFound",
+      component: () => import("@/views/NotFound")
+    },
   ]
 }

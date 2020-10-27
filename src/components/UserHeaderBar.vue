@@ -16,34 +16,27 @@
 </template>
 
 <script>
-import { uploadImg } from "../services/blogService";
+import { uploadEditorImg, uploadImg } from "../services/blogService";
 export default {
   data() {
     return {
-      imgUrl: this.$store.state.userInfo.headUrl
+      imgUrl: this.$store.state.userInfo.headUrl,
     };
   },
-  created() {
-    
-  },
-  // computed:{
-  //   userInfo() {
-  //     console.log(this.$store.state.userInfo);
-  //     this.userInfo=this.$store.state.userInfo
-  //     return this.$store.state.userInfo
-  //   }
-  // },
+  created() {},
   methods: {
     //上传图片
     uploadFile(event) {
       var file = event.target.files[0]; //获取input的图片file值
+      console.log(file);
       var formData = new FormData(); // 创建form对象
       formData.append("file", file); //对应后台接收图片名
-      uploadImg(formData).then((v)=>{
-      console.log(v);
-       this.imgUrl=v.data.msg
-       console.log(this.imgUrl);
-    });
+      console.log(formData);
+      uploadImg(formData).then((v) => {
+        // console.log(v);
+        this.imgUrl = v.data.msg;
+        // console.log(this.imgUrl);
+      });
     },
   },
 };
@@ -55,12 +48,12 @@ export default {
   width: 100%;
 }
 .infoMsgHead .inner {
-  width: 960px;
+  width: 1200px;
   height: 100%;
   margin: 0 auto;
 }
 .infoMsgHead .inner .user-left {
-  float: left;
+  /* float: left; */
   padding: 35px 48px 0 40px;
 }
 .infoMsgHead .inner .user-left .user-img {
@@ -84,7 +77,6 @@ export default {
   font-size: 12px;
   color: #f0f0f5;
   background: rgba(0, 0, 0, 0.8);
-
 }
 .infoMsgHead .inner .user-left .user-img:hover span {
   display: block;

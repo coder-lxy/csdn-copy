@@ -26,7 +26,11 @@
           </dd>
           <div class="summary">{{ item.summary }}</div>
           <div class="interactive">
-            <a href="javascript:;" @click.stop="beLike($event, index, item.blog.blogId)"  class="click-heart">
+            <a
+              href="javascript:;"
+              @click.stop="beLike($event, index, item.blogId)"
+              class="click-heart"
+            >
               <Icon type="like"></Icon>
               <span class="num">{{ item.likeCount }}</span>
             </a>
@@ -36,8 +40,8 @@
               <span class="num">{{ item.hitCount }}</span>
             </a>
             <div class="interval"></div>
-            <a href="javascript:;"  class="comment">
-              <Icon  type="comment"></Icon>
+            <a href="javascript:;" class="comment">
+              <Icon type="comment"></Icon>
               <span class="num">{{ item.commentCount }}</span>
             </a>
             <span></span>
@@ -50,7 +54,7 @@
 
 <script>
 import Icon from "./Icon";
-import {like} from "../services/blogService"
+import { like } from "../services/blogService";
 export default {
   props: {
     blogList: {},
@@ -58,6 +62,7 @@ export default {
   data() {
     return {
       blogId: null,
+      likeCount:''
     };
   },
   components: {
@@ -72,10 +77,13 @@ export default {
         },
       });
     },
-    beLike(e,index,id) {
-      this.isLike[index]=true;
-      like(id); 
-    }
+    beLike(e, index, id) {
+      console.log(this.blogList[index].likeCount);
+      // this.isLike[index]=true;
+      like(id);
+      console.log(this.blogList[index].likeCount);
+      // this.likeCount=this.blogList[index].likeCount
+    },
   },
 };
 </script>
@@ -98,7 +106,7 @@ export default {
   background-color: #fafafa;
 }
 .blog-list li .list-con .title h2 {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   line-height: 24px;
   margin-bottom: 4px;
@@ -151,7 +159,7 @@ export default {
 }
 .blog-list li .list-con .list-userbar dd {
   float: left;
-  font-size: 12px;
+  font-size: 14px;
   color: #8a8a8a;
   line-height: 24px;
 }
@@ -166,7 +174,7 @@ export default {
   flex: 40;
   margin-bottom: 4px;
   color: #8a8a8a;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 24px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -177,12 +185,12 @@ export default {
   justify-content: flex-end;
 }
 .blog-list li .list-con .list-userbar .interactive a {
-  font-size: 12px;
+  font-size: 14px;
   color: #999;
   text-align: center;
 }
 .blog-list li .list-con .list-userbar .interactive a:hover {
-  color:#157dcf;
+  color: #157dcf;
 }
 .blog-list li .list-con .list-userbar .interactive .active {
   color: #ca0c16;

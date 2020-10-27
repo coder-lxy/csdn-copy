@@ -102,7 +102,7 @@ export default {
         if (this.loginMsg.code === 0) {
           var startTime = Date.now();
           localStorage.setItem("startTime", startTime);
-          console.log(startTime);
+          // console.log(startTime);
           this.$router.push({
             path: "/",
           });

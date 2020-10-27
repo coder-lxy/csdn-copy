@@ -1,67 +1,166 @@
 <template>
   <div class="container clearfix">
-    <div class="nav clearfix">
-      <NavSecond />
-    </div>
-    <div class="mainContent clearfix">
+    <div class="mainContent clearfix" ref="list" @scroll="handleScroll">
       <div class="main">
-        <BlogList :blogList="blogs" />
+        <BlogList v-show="currentIndex === 0" :blogList="hotBlogs" />
+        <BlogList v-show="currentIndex === 1" :blogList="recBlogs" />
+        <BlogList v-show="currentIndex === 2" :blogList="newestBlogs" />
+        <BlogList v-show="currentIndex === 3" :blogList="followBlogs" />
+        <Loading v-show="isLoading"></Loading>
+        <!-- <div v-show="blogs.length === 0">{{ remindMsg }}</div> -->
+      </div>
+      <div v-show="RecList.length != 0" class="right-box">
+        <TodayRec :todayRec="RecList" />
       </div>
     </div>
-    <!-- <NavSecond></NavSecond> -->
   </div>
 </template>
 
 <script>
 import NavSecond from "../components/NavSecond";
 import BlogList from "../components/BlogList";
-import * as blogServ from "../services/blogService";
+import TodayRec from "../components/TodayRec";
+import Loading from "../components/Loading";
+import {
+  getHotBlogs,
+  getRec,
+  getNewest,
+  getTodayRec,
+  getFollow,
+} from "../services/blogService";
 import { search } from "../services/blogService";
 export default {
   data() {
     return {
-      blogs: [],
+      currentIndex: 0,
+      hotBlogs: [],
+      recBlogs: [],
+      newestBlogs: [],
+      followBlogs: [],
+      hotPage:2,
+      recPage:2,
+      newPage:2,
+      followPage:2,
+      RecList: [],
+      isLoading: false,
+      remindMsg: "这里什么都没有！",
     };
   },
   components: {
     BlogList,
-    NavSecond,
+    TodayRec,
+    Loading,
   },
   created() {
-    this.setBlogs();
-    console.log(this.$store.state.token);
-    // console.log();
+    this.initBlogs();
+    getTodayRec().then((v) => {
+      console.log(v.data);
+      this.RecList = v.data;
+    });
   },
-  methods:{
-    toSearch() {
-      search().then(v=>{
-        console.log(v);
-      })
-    }
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll, true);
+  },
+  methods: {
+    initBlogs() {
+      let page = 1;
+      getHotBlogs(page).then((v) => {
+        this.hotBlogs = v.data;
+        // this.total = this.blogs.length
+      });
+      getRec(page).then((v) => {
+        this.recBlogs = v.data;
+      });
+      getNewest(page).then((v) => {
+        this.newestBlogs = v.data;
+      });
+      getFollow(page).then((v) => {
+        this.followBlogs = v.data;
+      });
+    },
+    getHotBlogList() {
+      this.isLoading = true;
+      getHotBlogs(this.hotPage).then((v) => {
+        this.hotBlogs = this.hotBlogs.concat(v.data);
+       this.hotPage++;
+        this.isLoading = false;
+      });
+    },
+    getRecBlogList() {
+      this.isLoading = true;
+      getRec(this.recPage).then((v) => {
+        this.recBlogs = this.recBlogs.concat(v.data);
+        this.recPage++;
+        this.isLoading = false;
+      });
+    },
+    getNewBlogList() {
+      this.isLoading = true;
+      getNewest(this.newPage).then((v) => {
+        this.newestBlogs = this.newestBlogs.concat(v.data);
+        this.newPage++;
+        this.isLoading = false;
+      });
+    },
+    getFollowBlogList() {
+      this.isLoading = true;
+      getFollow(this.followPage).then((v) => {
+        this.followBlogs = this.followBlogs.concat(v.data);
+        this.followPage++;
+        this.isLoading = false;
+      });
+    },
+    handleScroll(e) {
+      let scrollTop = e.target.documentElement.scrollTop;
+      let clientHeight = e.target.documentElement.clientHeight;
+      let scrollHeight = e.target.documentElement.scrollHeight;
+      if (scrollTop + clientHeight >= scrollHeight - 10) {
+        if (this.currentIndex === 0) {
+          this.getHotBlogList();
+          console.log(this.hotBlogs);
+        }
+        if (this.currentIndex === 1) {
+          this.getRecBlogList();
+        }
+        if (this.currentIndex === 2) {
+          this.getNewBlogList();
+        }
+        if (this.currentIndex === 3) {
+          this.getFollowBlogList();
+        }
+      }
+    },
   },
   computed: {
     getSearchKey() {
       return this.$store.state.searchKey;
     },
+    getBlogListIndex() {
+      return this.$store.state.blogListIndex;
+    },
   },
   watch: {
     getSearchKey: {
-      deep:true,
-      handler(val){
+      deep: true,
+      handler(val) {
         // console.log(val);
-        search(val).then(v=>{
-          // console.log(v);
-          this.blogs=v.data
-        })
+        search(val).then((v) => {
+          if (v.data.length != 0) {
+            this.blogs = v.data;
+          } else {
+            this.remindMsg = "暂时没有您要搜索的东西！";
+            this.blogs = [];
+          }
+        });
         // this.toSearch(newValue)
-      }
-      
+      },
     },
-  },
-  methods: {
-    async setBlogs() {
-      var resp = await blogServ.getBlogs();
-      this.blogs = resp;
+    getBlogListIndex: {
+      deep: true,
+      handler(val) {
+        console.log(val);
+        this.currentIndex = val;
+      },
     },
   },
 };
@@ -69,9 +168,11 @@ export default {
 
 <style scoped>
 .container {
-  width: 1180px;
+  width: 1160px;
   padding: 12px 0 0;
   margin: 0 auto;
+  overflow: hidden;
+
   /* margin-top: 46px; */
 }
 .container .nav {
@@ -85,8 +186,10 @@ export default {
   top: 46px; */
 }
 .container .mainContent {
-  width: 1072px;
-  float: right;
+  width: 1180px;
+  margin: 0 auto;
+  /* overflow-y: scroll; */
+  /* height: 40em; */
 }
 .clearfix:after {
   content: "";
@@ -100,21 +203,12 @@ export default {
 }
 .container .mainContent .main {
   float: left;
-  width: 760px;
+  width: 660px;
+  margin: 0 auto;
   min-height: 500px;
-  margin-right: 12px;
+  /* margin-right: 12px; */
 }
-/* .header {
-  width: 1200;
-  height: 180px;
-  background: url(../assets/bgImg.jpg);
-  background-repeat: no-repeat;
-  background-position: 50%;
-  background-size: cover;
-} */
-/* .fixedNav {
-  position: fixed;
-  top: 300px;
-  right: 50px;
-} */
+.container .mainContent .right-box {
+  float: right;
+}
 </style>

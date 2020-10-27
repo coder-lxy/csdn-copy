@@ -1,8 +1,8 @@
 <!-- 顶部导航栏 -->
 <template>
   <div class="csdn-nav-bar">
-    <div class="container">
-      <ul class="nav-left-menu">
+    <div class="container clearfix">
+      <ul class="nav-left-menu clearfix">
         <li class="sub-menu-box">
           <a href="https://www.csdn.net" title="CSDN首页">
             <img src="../assets/logo.png" alt class="csdn-logo" />
@@ -11,49 +11,14 @@
             <img src="../assets/csdnqr.png" alt />
           </div>
         </li>
-        <li class="sub-menu-box">
-          <a href>博客</a>
-          <div class="sub-menu">
-            <a href>创作中心</a>
-          </div>
-        </li>
-        <li class="sub-menu-box">
-          <a href>学院</a>
-        </li>
-        <li class="sub-menu-box">
-          <a href>下载</a>
-          <div class="sub-menu">
-            <a href>我的资源</a>
-          </div>
-        </li>
-        <li class="sub-menu-box">
-          <a href>论坛</a>
-          <div class="sub-menu">
-            <a href>我的积分</a>
-          </div>
-        </li>
-        <li class="sub-menu-box">
-          <a href>问答</a>
-        </li>
-        <li class="sub-menu-box">
-          <a href>直播</a>
-        </li>
-        <li class="sub-menu-box">
-          <a href>代码</a>
-          <div class="sub-menu">
-            <a href>新建项目</a>
-          </div>
-        </li>
-        <li class="sub-menu-box">
-          <a href>招聘</a>
-        </li>
-
-        <li class="sub-menu-box">
-          <a href>VIP会员</a>
-          <div class="sub-menu">
-            <a href>VIP权益</a>
-            <a href>电子书</a>
-          </div>
+        <li
+          v-for="(item, index) in navList"
+          :key="index"
+          class="sub-menu-box"
+          @click="changeBlogList(index)"
+          :class="{ active: currentIndex === index }"
+        >
+          <a href="javascript:;">{{ item }}</a>
         </li>
         <div class="serch-bar">
           <input
@@ -68,25 +33,20 @@
           </a>
         </div>
       </ul>
-      <ul class="nav-right-menu">
+      <ul class="nav-right-menu clearfix">
         <li class="write-bolg-btn">
-          <a href>
+          <a href="javascript:;" @click="toWrite()">
             <i class="csdn-write"></i>
-            <span>创作中心</span>
+            <span>写博客</span>
           </a>
-          <div class="write-blog">
-            <a @click="toWrite()" class="write-link" href="javascript:;"
-              >写博客</a
-            >
-          </div>
         </li>
         <li class="collection">
-          <a href title="我的收藏">
+          <a href="javascript:;" title="我的收藏">
             <i class="icon"></i>
           </a>
         </li>
         <li class="msg">
-          <a href>
+          <a href="javascript:;">
             <i class="icon"></i>
             <div class="msg-circle"></div>
           </a>
@@ -140,7 +100,7 @@
             </ul>
           </div>
         </li>
-        <li v-show="!isLogin" @click="login" class="userinfo">
+        <li v-show="!this.$store.state.isLogin" @click="login" class="userinfo">
           <a href="javascript:;">登录/注册</a>
         </li>
         <li v-show="isLogin" class="user-login">
@@ -148,8 +108,15 @@
             <img @click="toProfile()" :src="userInfo.headUrl" alt="" />
           </a>
           <div class="userControl">
+            <div
+              @click="toUserInfo(index)"
+              v-for="(item, index) in Mylist"
+              :key="index"
+            >
+              <a href="javascript:;">{{ item }}</a>
+            </div>
             <div class="logout">
-              <a @click="logout" href="javascript:;">退出</a>
+              <a @click="logout" href="javascript:;">退出登录</a>
             </div>
           </div>
         </li>
@@ -164,11 +131,15 @@ export default {
   props: {
     isLogin: false,
     userInfo: {},
+    currentIndex: "",
   },
   data() {
     return {
+      navList: ["热榜", "推荐", "最新", "关注"],
+      Mylist: ["我的收藏", "我的关注", "我的粉丝", "我的博客"],
       msg: "",
       searchList: {},
+      blogList: [],
     };
   },
   methods: {
@@ -177,26 +148,55 @@ export default {
         path: "/login",
         // query:''
       });
-      console.log(this.isLogin);
-      console.log(this.currentUser);
     },
     logout() {
+      // console.log(this.$store.state.isLogin);
       localStorage.removeItem("token");
-      this.isLogin = flase;
-      console.log(this.isLogin);
-    },
-    toWrite() {
+      this.$store.commit("changeIsLogin", false);
       this.$router.push({
-        path: "/editor",
+        path: "/",
+        // query:''
       });
     },
+    changeBlogList(index) {
+      this.$store.commit("changeBlogListIndex", index);
+      this.$router.push({
+        path: "/",
+      });
+    },
+    toWrite() {
+      this.$store.commit("changeBlogListIndex", "");
+      if (localStorage.getItem("token")) {
+        this.$router.push({
+          path: "/editor",
+        });
+      } else {
+        this.$router.push({
+          path: "/login",
+        });
+      }
+    },
     toProfile() {
+      this.$store.commit("changeBlogListIndex", "");
       this.$router.push({
         path: "/userinfo",
       });
     },
     toSearch(msg) {
-      this.$emit("setSearchKey", msg);
+      this.$store.commit("changeBlogListIndex", "");
+      this.$store.commit("changeSearchKey",msg)
+      this.$router.push({
+        path: "/",
+      });
+    },
+    toUserInfo(index) {
+      this.$store.commit("changeBlogListIndex", "");
+      this.$router.push({
+        path: "/userinfo",
+        query: {
+          id: index,
+        },
+      });
     },
   },
 };
@@ -225,7 +225,7 @@ export default {
 .csdn-nav-bar .container .nav-left-menu {
   height: 100%;
   float: left;
-  margin-left: -6px;
+  /* margin-left: -6px; */
 }
 .csdn-nav-bar .container .csdn-logo {
   width: 80px;
@@ -235,9 +235,11 @@ export default {
   float: left;
 }
 .csdn-nav-bar .container .nav-left-menu .sub-menu-box:hover > a {
-  background-color: #fff;
-  color: #20232c;
+  background-color: #f0f0f5;
+  color: #555666;
+  font-weight: normal;
 }
+
 .csdn-nav-bar .container .nav-left-menu .sub-menu-box:hover .sub-menu {
   display: block;
 }
@@ -250,8 +252,12 @@ export default {
   line-height: 44px;
   padding: 0 10px;
   text-align: center;
-  font-size: 12px;
+  font-size: 14px;
   color: #555666;
+}
+.csdn-nav-bar .container .nav-left-menu .active a {
+  color: #e33e33;
+  font-weight: 700;
 }
 .csdn-nav-bar .container .nav-left-menu .sub-menu-box .sub-menu {
   display: none;
@@ -292,7 +298,7 @@ export default {
   width: 382px;
   height: 100%;
   line-height: inherit;
-  font-size: 12px;
+  font-size: 14px;
   color: #999;
   padding-left: 16px;
   border: 0;
@@ -315,7 +321,7 @@ export default {
   height: 32px;
 }
 .csdn-nav-bar .container .nav-right-menu {
-  float: right;
+  float: left;
   height: 44px;
   line-height: 44px;
   color: #333;
@@ -328,30 +334,6 @@ export default {
   height: 100%;
   /* border: 1px solid #eee; */
 }
-.csdn-nav-bar .container .nav-right-menu .write-bolg-btn .write-blog {
-  display: none;
-  min-height: 48px;
-  width: 92px;
-  position: absolute;
-  top: 32px;
-  background: #fff;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  padding: 6px 0;
-}
-.csdn-nav-bar .container .nav-right-menu .write-bolg-btn .write-blog a {
-  height: 36px;
-  width: 92px;
-  font-style: 12px;
-  color: rgba(85, 86, 102, 1);
-  line-height: 36px;
-  background: #fff;
-}
-.csdn-nav-bar .container .nav-right-menu .write-bolg-btn .write-blog a:hover {
-  background: rgba(240, 240, 245, 1);
-}
-.csdn-nav-bar .container .nav-right-menu .write-bolg-btn:hover .write-blog {
-  display: block;
-}
 .csdn-nav-bar .container .nav-right-menu li a {
   display: inline-block;
   text-align: center;
@@ -360,6 +342,7 @@ export default {
 .csdn-nav-bar .container .nav-right-menu .write-bolg-btn a {
   height: 32px;
   width: 92px;
+  font-size: 14px;
   margin-top: 6px;
   border-radius: 4px;
   color: #fff;
@@ -382,7 +365,7 @@ export default {
   height: 100%;
   line-height: 44px;
   color: #555666;
-  font-size: 12px;
+  font-size: 14px;
 }
 .csdn-nav-bar .container .nav-right-menu li .icon {
   display: inline-block;
@@ -394,7 +377,6 @@ export default {
 .csdn-nav-bar .container .nav-right-menu .collection i {
   background: url(../assets/collection.png) no-repeat;
   background-size: contain;
-  /* margin-right: 0; */
 }
 .csdn-nav-bar .container .nav-right-menu .msg {
   position: relative;
@@ -416,7 +398,7 @@ export default {
   top: 44px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 12px;
+  font-size: 14px;
   border-radius: 3px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
   z-index: 99999;
@@ -429,7 +411,7 @@ export default {
   display: inline-block;
   padding-left: 32px;
   height: 40px;
-  font-size: 12px;
+  font-size: 14px;
   color: #555666;
   line-height: 40px;
 }
@@ -463,9 +445,28 @@ export default {
   display: none;
   position: absolute;
   background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
   top: 40px;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999999;
 }
+.csdn-nav-bar .container .nav-right-menu .user-login .userControl div {
+  padding: 0 16px 0 16px;
+}
+.csdn-nav-bar .container .nav-right-menu .user-login .userControl div a {
+  color: #555666;
+  font-size: 14px;
+  width: 56px;
+  height: 36px;
+  line-height: 36px;
+  text-align: left;
+}
+.csdn-nav-bar .container .nav-right-menu .user-login .userControl div:hover {
+  background: #f0f0f5;
+}
+
 .csdn-nav-bar .container .nav-right-menu .user-login:hover .userControl {
   display: block;
 }

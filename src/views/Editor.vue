@@ -21,7 +21,6 @@ export default {
   data() {
     return {
       modalStatus: false,
-      userInfo:{},
       title:'',
       content:''
     };

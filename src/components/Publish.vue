@@ -97,7 +97,7 @@
           </button>
           <button v-show="edit" class="add-tag">
             <input v-model="newClassify" @keyup.enter="addClassify()" />
-            <i class="add-tag-close" @click="edit = false">x</i>
+            <i class="add-tag-close" @click="closeInput()">x</i>
           </button>
           <button
             v-show="classify.length < 3"
@@ -118,12 +118,17 @@
               <div class="tag-options-list clearfix">
                 <ul>
                   <li v-for="(item, index) in userClassify" :key="index">
-                    <input type="checkbox" class="checkbox" v-model="c" />
+                    <input
+                      type="checkbox"
+                      class="checkbox"
+                      v-model="classify"
+                      :value="item"
+                    />
                     <span>{{ item }}</span>
                   </li>
                 </ul>
               </div>
-              <div class="max-class-num-mask">
+              <div v-show="classify.length >= 3" class="max-class-num-mask">
                 <div class="show-content">
                   <!-- <i>-</i> -->
                   <p>最多选三个专栏哦~</p>
@@ -152,6 +157,7 @@ export default {
   data() {
     return {
       tagBox: false,
+      status: "",
       tags: [
         {
           tagName: "推荐",
@@ -381,12 +387,12 @@ export default {
   created() {
     getClassify(this.$store.state.userInfo.userId).then((v) => {
       this.userClassify = v.data;
-      console.log(this.userClassify);
+      // console.log(this.userClassify);
     });
   },
   methods: {
     modalClose() {
-      this.status = false;
+      var status = false;
       this.$emit("modalChange", status);
     },
     addTag(tag) {
@@ -418,24 +424,34 @@ export default {
       this.edit = true;
     },
     addClassify() {
-      if (this.classify.indexOf(this.newClassify) === -1) {
+      if (
+        this.classify.indexOf(this.newClassify) &&
+        this.userClassify.indexOf(this.newClassify) === -1
+      ) {
         this.classify.push(this.newClassify);
         this.edit = false;
         this.newClassify = "";
+      } else {
+        alert("分类已存在！");
       }
+    },
+    closeInput() {
+      this.edit = false;
+      this.newClassify = "";
     },
     removeClassify(index) {
       this.classify.splice(index, 1);
     },
     pubArticle() {
-      this.newBlog.title=this.title
-      this.newBlog.article=this.content
-      this.newBlog.types = this.classify
-      this.newBlog.labels = this.selectedTags
-      publish(this.newBlog).then(v=>{
-        console.log(this.newBlog);
-        console.log(v);
-      })
+      this.newBlog.title = this.title;
+      this.newBlog.article = this.content;
+      this.newBlog.types = this.classify;
+      this.newBlog.labels = this.selectedTags;
+      publish(this.newBlog).then((v) => {
+        this.$router.push({
+          path:'/'
+        })
+      });
     },
   },
 };
@@ -675,7 +691,6 @@ export default {
 }
 
 .form-tag-box .right .max-class-num-mask {
-  display: none;
   position: absolute;
   top: 0;
   right: 0;

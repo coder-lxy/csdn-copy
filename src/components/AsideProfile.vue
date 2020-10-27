@@ -37,14 +37,6 @@
           <span class="count">{{userInfo.fansCount}}</span>
           <span class="title">粉丝</span>
         </li>
-        <!-- <li class="data-item">
-          <span class="count">1</span>
-          <span class="title">获赞</span>
-        </li> -->
-        <!-- <li class="data-item">
-          <span class="count">1</span>
-          <span class="title">评论</span>
-        </li> -->
         <li class="data-item">
           <span class="count">{{userInfo.likeCount}}</span>
           <span class="title">获赞</span>
@@ -71,6 +63,9 @@ export default {
   props: {
     userInfo:{}
   },
+  created(){
+    console.log(this.userInfo);
+  }
 };
 </script>
 

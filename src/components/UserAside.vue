@@ -1,6 +1,6 @@
 <template>
   <ul class="aside">
-    <li v-for="(item,index) in list" :key="index">
+    <li v-for="(item,index) in myList" :key="index">
       <a href="javascript:;" @click="btnClick(index)" :class="{active:currentIndex===index}">{{item}}</a>
     </li>
   </ul>
@@ -8,10 +8,13 @@
 
 <script>
 export default {
+  props:{
+    currentIndex:''
+  },
   data() {
     return {
-      list:['我的收藏','我的关注','我的粉丝','我的博客'],
-      currentIndex:'0'
+      myList:['我的收藏','我的关注','我的粉丝','我的博客'],
+      // currentIndex:0
     }
   },
   methods:{
