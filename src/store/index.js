@@ -30,6 +30,10 @@ var store = new Vuex.Store({
       localStorage.setItem('userInfo',JSON.stringify(userInfo))
       state.userInfo=userInfo
     },
+    removeUserInfo(state) {
+      state.token ='';
+      state.userInfo =''
+    },
     changeIsLogin(state, isLogin) {
       state.isLogin=isLogin
     },

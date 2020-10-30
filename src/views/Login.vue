@@ -55,7 +55,14 @@
               <div v-show="this.regMsg.code === -1" class="tips">
                 {{ this.regMsg.msg }}
               </div>
-              <button @click="toRegister" :class="{ active: newUserInfo.username && newUserInfo.password }">注册</button>
+              <button
+                @click="toRegister"
+                :class="{
+                  active: newUserInfo.username && newUserInfo.password,
+                }"
+              >
+                注册
+              </button>
             </div>
           </div>
         </div>
@@ -69,7 +76,6 @@ import { login } from "../services/blogService";
 import { register } from "../services/blogService";
 import axios from "axios";
 // import jwtDecode from "jwt-decode"
-
 
 export default {
   data() {
@@ -97,11 +103,13 @@ export default {
   methods: {
     toLogin() {
       login(this.userInfo).then((v) => {
-        console.log(v.data);
+        console.log(v);
         this.loginMsg = v.data;
-        if (this.loginMsg.code === 0) {
+        if (v.data.code === 0) {
           var startTime = Date.now();
           localStorage.setItem("startTime", startTime);
+          this.$store.commit("setUserInfo", v.data.data);
+          this.$store.commit("changeIsLogin", true);
           // console.log(startTime);
           this.$router.push({
             path: "/",

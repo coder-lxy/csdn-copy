@@ -4,11 +4,11 @@
     <div class="container clearfix">
       <ul class="nav-left-menu clearfix">
         <li class="sub-menu-box">
-          <a href="https://www.csdn.net" title="CSDN首页">
-            <img src="../assets/logo.png" alt class="csdn-logo" />
+          <a href="javascript:;"  @click="changeBlogList(0)" title="CSDN首页">
+            <img src="../assets/logo.jpg" alt class="csdn-logo" />
           </a>
           <div class="sub-menu">
-            <img src="../assets/csdnqr.png" alt />
+            <img src="../assets/erweima.jpg" alt />
           </div>
         </li>
         <li
@@ -25,7 +25,7 @@
             type="text"
             v-model="msg"
             class="input-search"
-            placeholder="搜CSDN"
+            placeholder="搜文章"
             @keyup.enter="toSearch(msg)"
           />
           <a @click="toSearch(msg)" class="btn-search">
@@ -37,7 +37,7 @@
         <li class="write-bolg-btn">
           <a href="javascript:;" @click="toWrite()">
             <i class="csdn-write"></i>
-            <span>写博客</span>
+            <span>写文章</span>
           </a>
         </li>
         <li class="collection">
@@ -116,7 +116,7 @@
               <a href="javascript:;">{{ item }}</a>
             </div>
             <div class="logout">
-              <a @click="logout" href="javascript:;">退出登录</a>
+              <a @click="toLogout" href="javascript:;">退出登录</a>
             </div>
           </div>
         </li>
@@ -126,6 +126,7 @@
 </template>
 
 <script>
+import { logout } from "../services/blogService";
 // import logo from "../assets/logo.png "
 export default {
   props: {
@@ -149,13 +150,18 @@ export default {
         // query:''
       });
     },
-    logout() {
+    toLogout() {
       // console.log(this.$store.state.isLogin);
-      localStorage.removeItem("token");
-      this.$store.commit("changeIsLogin", false);
-      this.$router.push({
-        path: "/",
-        // query:''
+      logout().then((v) => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userInfo");
+        this.$store.commit("changeIsLogin", false);
+        this.$store.commit("removeUserInfo");
+
+        this.$router.push({
+          path: "/",
+          // query:''
+        });
       });
     },
     changeBlogList(index) {
@@ -184,7 +190,7 @@ export default {
     },
     toSearch(msg) {
       this.$store.commit("changeBlogListIndex", "");
-      this.$store.commit("changeSearchKey",msg)
+      this.$store.commit("changeSearchKey", msg);
       this.$router.push({
         path: "/",
       });

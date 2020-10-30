@@ -2,10 +2,10 @@
   <div class="container clearfix">
     <div class="mainContent clearfix" ref="list" @scroll="handleScroll">
       <div class="main">
-        <BlogList v-show="currentIndex === 0" :blogList="hotBlogs" />
-        <BlogList v-show="currentIndex === 1" :blogList="recBlogs" />
-        <BlogList v-show="currentIndex === 2" :blogList="newestBlogs" />
-        <BlogList v-show="currentIndex === 3" :blogList="followBlogs" />
+        <BlogList v-show="this.currentIndex === 0" :blogList="hotBlogs" />
+        <BlogList v-show="this.currentIndex === 1" :blogList="recBlogs" />
+        <BlogList v-show="this.currentIndex === 2" :blogList="newestBlogs" />
+        <BlogList v-show="this.currentIndex === 3" :blogList="followBlogs" />
         <Loading v-show="isLoading"></Loading>
         <!-- <div v-show="blogs.length === 0">{{ remindMsg }}</div> -->
       </div>
@@ -32,15 +32,15 @@ import { search } from "../services/blogService";
 export default {
   data() {
     return {
-      currentIndex: 0,
+      currentIndex: "",
       hotBlogs: [],
       recBlogs: [],
       newestBlogs: [],
       followBlogs: [],
-      hotPage:2,
-      recPage:2,
-      newPage:2,
-      followPage:2,
+      hotPage: 1,
+      recPage: 1,
+      newPage: 1,
+      followPage: 1,
       RecList: [],
       isLoading: false,
       remindMsg: "这里什么都没有！",
@@ -52,37 +52,23 @@ export default {
     Loading,
   },
   created() {
-    this.initBlogs();
-    getTodayRec().then((v) => {
-      console.log(v.data);
-      this.RecList = v.data;
+    this.currentIndex = this.$store.state.blogListIndex;
+    this.getCurrentBlogList();
+    getTodayRec().then(v=>{
+      this.RecList=v.data
+      // console.log(v.data);
     });
   },
+
   mounted() {
     window.addEventListener("scroll", this.handleScroll, true);
   },
   methods: {
-    initBlogs() {
-      let page = 1;
-      getHotBlogs(page).then((v) => {
-        this.hotBlogs = v.data;
-        // this.total = this.blogs.length
-      });
-      getRec(page).then((v) => {
-        this.recBlogs = v.data;
-      });
-      getNewest(page).then((v) => {
-        this.newestBlogs = v.data;
-      });
-      getFollow(page).then((v) => {
-        this.followBlogs = v.data;
-      });
-    },
     getHotBlogList() {
       this.isLoading = true;
       getHotBlogs(this.hotPage).then((v) => {
         this.hotBlogs = this.hotBlogs.concat(v.data);
-       this.hotPage++;
+        this.hotPage++;
         this.isLoading = false;
       });
     },
@@ -110,24 +96,26 @@ export default {
         this.isLoading = false;
       });
     },
+    getCurrentBlogList() {
+      if (this.currentIndex===0) {
+        this.getHotBlogList();
+      }
+      if (this.currentIndex===1) {
+        this.getRecBlogList();
+      }
+      if (this.currentIndex===2) {
+        this.getNewBlogList();
+      }
+      if (this.currentIndex===3) {
+        this.getFollowBlogList();
+      }
+    },
     handleScroll(e) {
       let scrollTop = e.target.documentElement.scrollTop;
       let clientHeight = e.target.documentElement.clientHeight;
       let scrollHeight = e.target.documentElement.scrollHeight;
       if (scrollTop + clientHeight >= scrollHeight - 10) {
-        if (this.currentIndex === 0) {
-          this.getHotBlogList();
-          console.log(this.hotBlogs);
-        }
-        if (this.currentIndex === 1) {
-          this.getRecBlogList();
-        }
-        if (this.currentIndex === 2) {
-          this.getNewBlogList();
-        }
-        if (this.currentIndex === 3) {
-          this.getFollowBlogList();
-        }
+        this.getCurrentBlogList();
       }
     },
   },
@@ -139,6 +127,9 @@ export default {
       return this.$store.state.blogListIndex;
     },
   },
+  // beforeDestroy() {
+  //   this.$store.commit('changeSearchKey','')
+  // },
   watch: {
     getSearchKey: {
       deep: true,
@@ -158,8 +149,9 @@ export default {
     getBlogListIndex: {
       deep: true,
       handler(val) {
-        console.log(val);
+        // console.log(val);
         this.currentIndex = val;
+        this.getCurrentBlogList();
       },
     },
   },
