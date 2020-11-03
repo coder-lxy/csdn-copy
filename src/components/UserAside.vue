@@ -1,7 +1,7 @@
 <template>
   <ul class="aside">
     <li v-for="(item,index) in myList" :key="index">
-      <a href="javascript:;" @click="btnClick(index)" :class="{active:currentIndex===index}">{{item}}</a>
+      <a href="javascript:;" @click="changeIndex(index)" :class="{active:currentIndex===index}">{{item}}</a>
     </li>
   </ul>
 </template>
@@ -13,13 +13,16 @@ export default {
   },
   data() {
     return {
-      myList:['我的收藏','我的关注','我的粉丝','我的博客'],
+      myList:['我的收藏','我的关注','我的粉丝','我的博客','我的点赞','我的评论'],
       // currentIndex:0
     }
   },
+  created() {
+
+  },
   methods:{
-    btnClick(index) {
-      this.currentIndex = index
+    changeIndex(index) {
+      this.$store.commit("changeUserListIndex",index)
     }
   }
 }

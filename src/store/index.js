@@ -7,7 +7,10 @@ var store = new Vuex.Store({
     userInfo:{},
     isLogin:false,
     searchKey:'',
-    blogListIndex:0
+    blogListIndex:0,
+    userListIndex:0,
+    likeList:[],
+    commentList:[]
   },
   getters:{
     // 获取token方法
@@ -42,6 +45,15 @@ var store = new Vuex.Store({
     },
     changeBlogListIndex(state,value) {
       state.blogListIndex=value
+    },
+    changeUserListIndex(state,value) {
+      state.userListIndex=value
+    },
+    setLikeList(state,value) {
+      state.likeList=value
+    },
+    setCommentList(state,value) {
+      state.commentList=value
     }
   },
   

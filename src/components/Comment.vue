@@ -2,7 +2,8 @@
   <div class="comment-box">
     <div class="comment-edit-box">
       <div class="user-img"></div>
-      <form action="">
+      <!-- 评论框 -->
+      <form>
         <textarea
           class="comment-content"
           v-model="comment.content"
@@ -13,9 +14,9 @@
       </form>
       <input
         type="button"
-        @click="pubComment(blogId)"
+        @click="toPubComment()"
         class="btn-comment-show"
-        :class="{active:comment.content!=''}"
+        :class="{ active: comment.content != '' }"
         value="评论"
       />
     </div>
@@ -38,25 +39,6 @@
                 <span class="btn-reply" @click="reply(index, item.commentId)"
                   >回复</span
                 >
-                <div v-show="currentIndex === index" class="comment-edit-box">
-                  <div class="user-img"></div>
-                  <form action="">
-                    <textarea
-                      class="comment-content"
-                      v-model="comment.content"
-                      @blur="closeInput()"
-                      placeholder="回复"
-                      ref="focusTextarea"
-                    ></textarea>
-                  </form>
-                  <input
-                    type="button"
-                    @click="pubComment(blogId)"
-                    class="btn-comment-show"
-                    :class="{active:comment.content!=''}"
-                    value="回复"
-                  />
-                </div>
               </div>
             </div>
           </li>
@@ -64,8 +46,8 @@
             <ul class="comment-list">
               <li
                 class="comment-line-box"
-                v-for="(i, index) in item.commentVOS"
-                :key="index"
+                v-for="(i, index1) in item.commentVOS"
+                :key="index1"
               >
                 <a href="">
                   <img :src="i.headUrl" alt="" />
@@ -80,11 +62,32 @@
                     <span class="colon">:</span>
                     <span class="new-comment">{{ i.content }}</span>
                     <span class="date">{{ i.createDate }}</span>
+                    <span class="btn-reply" @click="reply(index, i.commentId)"
+                      >回复
+                    </span>
                   </div>
                 </div>
               </li>
             </ul>
           </li>
+          <div v-show="currentIndex === index" class="comment-edit-box">
+            <div class="user-img"></div>
+            <form action="">
+              <textarea
+                class="comment-content"
+                v-model="comment.content"
+                placeholder="回复"
+                ref="focusTextarea"
+              ></textarea>
+            </form>
+            <input
+              type="button"
+              @click="toPubComment()"
+              class="btn-comment-show"
+              :class="{ active: comment.content != '' }"
+              value="回复"
+            />
+          </div>
         </ul>
       </div>
     </div>
@@ -97,6 +100,9 @@ export default {
   props: {
     blogId: "",
     comments: {},
+  },
+  created() {
+    console.log(this.comments);
   },
   data() {
     return {
@@ -115,11 +121,11 @@ export default {
     this.$refs.focusTextarea.focus();
   },
   methods: {
-    pubComment() {
+    toPubComment() {
       this.comment.blogId = this.blogId;
-      console.log(this.comment);
+      // console.log(this.comment);
       pubComment(this.comment).then((v) => {
-        console.log(v);
+        // console.log(v);
         this.comment.content = "";
       });
     },
@@ -147,7 +153,7 @@ export default {
   display: flex;
   padding: 16px 24px 8px;
 }
-.comment-box .comment-edit-box .active {
+.comment-box .comment-edit-box input.active {
   background-color: #e33e33;
 }
 .comment-box .comment-edit-box .user-img {

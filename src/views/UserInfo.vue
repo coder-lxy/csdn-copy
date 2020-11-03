@@ -3,10 +3,16 @@
     <UserHeaderBar />
     <div class="container clearfix">
       <div class="left-box">
-      <UserAside :currentIndex="index"/>
+      <UserAside :currentIndex="this.$store.state.userListIndex"/>
       </div>
       <div class="right-box">
-        <MyBlogs></MyBlogs>
+        <MsgContent v-show="this.$store.state.userListIndex===0" :list=this.$store.state.likeList></MsgContent>
+        <MsgContent v-show="this.$store.state.userListIndex===1" :list=this.$store.state.commentList></MsgContent>
+        <MsgContent v-show="this.$store.state.userListIndex===2" :list=this.$store.state.commentList></MsgContent>
+        <MsgContent v-show="this.$store.state.userListIndex===3" :list=this.$store.state.commentList></MsgContent>
+        <MsgContent v-show="this.$store.state.userListIndex===4" :list=this.$store.state.likeList></MsgContent>
+        <MsgContent v-show="this.$store.state.userListIndex===5" :list=this.$store.state.commentList></MsgContent>
+        <!-- <MyBlogs></MyBlogs> -->
         <!-- <ViewContainer></ViewContainer> -->
       </div>
     </div>
@@ -18,16 +24,18 @@ import UserHeaderBar from "../components/UserHeaderBar"
 import UserAside from "../components/UserAside"
 import ViewContainer from "../components/ViewContainer"
 import MyBlogs from "../components/MyBlogs"
+import MsgContent from "../components/MsgContent"
 import { getUserBlogs } from '../services/blogService';
 export default {
   components:{
     UserHeaderBar,
     UserAside,
-    MyBlogs
+    MyBlogs,
+    MsgContent
   },
   data(){
     return {
-      index:this.$route.query.id,
+      index:this.$store.state.userListIndex,
       blogList:[]
     }
   },

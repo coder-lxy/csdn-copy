@@ -2,7 +2,7 @@
   <div class="container clearfix">
     <div class="mainContent clearfix" ref="list" @scroll="handleScroll">
       <div class="main">
-        <BlogList v-show="this.currentIndex === 0" :blogList="hotBlogs" />
+        <BlogList v-show="this.currentIndex === 0" :blogList="hotBlogs"/>       
         <BlogList v-show="this.currentIndex === 1" :blogList="recBlogs" />
         <BlogList v-show="this.currentIndex === 2" :blogList="newestBlogs" />
         <BlogList v-show="this.currentIndex === 3" :blogList="followBlogs" />
@@ -66,6 +66,7 @@ export default {
   methods: {
     getHotBlogList() {
       this.isLoading = true;
+      console.log(this.hotPage);
       getHotBlogs(this.hotPage).then((v) => {
         this.hotBlogs = this.hotBlogs.concat(v.data);
         this.hotPage++;

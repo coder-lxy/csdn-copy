@@ -2,8 +2,8 @@ import axios from "axios";
 import { URL } from "./config";
 // 分页获取新闻
 export async function getHotBlogs(page) {
-  var resp = await axios.get(URL + "hot/" + page)
-  // console.log(resp);
+  var resp = await axios.get(URL + "all/hot/" + page)
+  console.log(resp);
   return resp;
 }
 export async function getRec(page) {
@@ -12,12 +12,12 @@ export async function getRec(page) {
   return resp;
 }
 export async function getNewest(page) {
-  var resp = await axios.post(URL + "newest/"+ page)
+  var resp = await axios.post(URL + "all/newest/"+ page)
   // console.log(resp);
   return resp;
 }
 export async function getTodayRec() {
-  var resp = await axios.post(URL + "todayrecommend/")
+  var resp = await axios.post(URL + "all/todayrecommend/")
   // console.log(resp);
   return resp;
 }
@@ -27,7 +27,7 @@ export async function getFollow(page) {
   return resp;
 }
 export async function getBlog(id) {
-  var resp = await axios.get(URL + "detail/" + id)
+  var resp = await axios.get(URL + "all/detail/" + id)
   // console.log(resp);
   return resp;
 }
@@ -57,7 +57,7 @@ export async function edit(data) {
   return resp;
 }
 export async function like(id) {
-  var resp = await axios.post(URL + "like/" + id)
+  var resp = await axios.post(URL + "user/like/" + id)
   console.log(resp);
   return resp.data;
 }
@@ -99,13 +99,33 @@ export async function getComment(blogId) {
   return resp;
 }
 export async function pubComment(comment) {
-  var resp = await axios.post(URL + "publishcomment/", comment)
+  var resp = await axios.post(URL + "user/publishcomment/", comment)
   // console.log(resp);
   return resp;
 }
 export async function getUserBlogs(userId) {
   var resp = await axios.post(URL + "publishcomment/", userId)
   // console.log(resp);
+  return resp;
+}
+export async function likeMsg() {
+  var resp = await axios.post(URL + "msg/like/")
+  console.log(resp);
+  return resp;
+}
+export async function lookLike() {
+  var resp = await axios.post(URL + "msg/likedetail/")
+  console.log(resp);
+  return resp;
+}
+export async function commentMsg() {
+  var resp = await axios.post(URL + "msg/comment/")
+  console.log(resp);
+  return resp;
+}
+export async function lookComment() {
+  var resp = await axios.post(URL + "msg/commentdetail/")
+  console.log(resp);
   return resp;
 }
 

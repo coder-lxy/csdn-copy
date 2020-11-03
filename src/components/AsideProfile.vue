@@ -61,7 +61,7 @@
 
 export default {
   props: {
-    userInfo:{}
+    userInfo:{},
   },
   created(){
     console.log(this.userInfo);

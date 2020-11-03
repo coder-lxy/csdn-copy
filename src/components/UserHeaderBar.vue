@@ -1,15 +1,15 @@
 <template>
   <div class="infoMsgHead">
     <div class="inner">
-      <div class="user-left">
-        <div class="user-img">
-          <img :src="imgUrl" alt="" />
+      <div class="user-left clearfix">
+        <div class="user-img clearfix">
+          <img :src="user.headUrl" alt="" />
           <span>上传头像</span>
           <input type="file" class="modify-img" @change="uploadFile($event)" />
         </div>
-      </div>
-      <div class="user-info">
-        <p class="user-id"></p>
+        <div class="user-info">
+          <p class="user-id">{{ user.username }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -20,10 +20,12 @@ import { uploadEditorImg, uploadImg } from "../services/blogService";
 export default {
   data() {
     return {
-      imgUrl: this.$store.state.userInfo.headUrl,
+      user: this.$store.state.userInfo,
     };
   },
-  created() {},
+  created() {
+    console.log(this.user);
+  },
   methods: {
     //上传图片
     uploadFile(event) {
@@ -57,6 +59,7 @@ export default {
   padding: 35px 48px 0 40px;
 }
 .infoMsgHead .inner .user-left .user-img {
+  float: left;
   width: 80px;
   height: 80px;
   border-radius: 50%;
@@ -96,16 +99,16 @@ export default {
   line-height: 24px;
   text-align: center;
 }
-.infoMsgHead .inner .user-left p {
+/* .infoMsgHead .inner .user-left p {
   color: #f0f0f5;
   font-size: 13px;
   text-align: center;
   margin-top: 8px;
-}
+} */
 .infoMsgHead .inner .user-info {
   float: left;
   padding-top: 40px;
-  color: #fff;
+  color: #555666;
   font-size: 16px;
   padding-right: 24px;
 }

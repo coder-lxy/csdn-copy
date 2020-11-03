@@ -35,14 +35,14 @@ export default {
       this.blog = v.data;
       // console.log(this.blog.userId);
       getUserInfo(this.blog.userId).then((v) => {
-        console.log(v);
+        // console.log(v);
         this.userInfo = v.data;
       });
     });
     getComment(this.$route.query.id).then((v) => {
       // console.log(v.data);
       this.comments=v.data
-      console.log(this.comments);
+      // console.log(this.comments);
     });
   },
 };

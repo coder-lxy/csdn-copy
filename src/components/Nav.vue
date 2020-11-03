@@ -4,8 +4,8 @@
     <div class="container clearfix">
       <ul class="nav-left-menu clearfix">
         <li class="sub-menu-box">
-          <a href="javascript:;"  @click="changeBlogList(0)" title="CSDN首页">
-            <img src="../assets/logo.jpg" alt class="csdn-logo" />
+          <a href="javascript:;" @click="changeBlogList(0)" title="CSDN首页">
+            <img src="../assets/logo.png" alt class="csdn-logo" />
           </a>
           <div class="sub-menu">
             <img src="../assets/erweima.jpg" alt />
@@ -42,60 +42,50 @@
         </li>
         <li class="collection">
           <a href="javascript:;" title="我的收藏">
-            <i class="icon"></i>
+            收藏
+            <!-- <i class="icon"></i> -->
           </a>
         </li>
         <li class="msg">
           <a href="javascript:;">
-            <i class="icon"></i>
-            <div class="msg-circle"></div>
+            消息
+            <i v-show="msgCount != 0" class="msg-circle">{{ msgCount }}</i>
           </a>
           <div class="msgList">
             <ul>
               <li>
                 <a href>
                   公告
-                  <em class="notice"></em>
+                  <em v-show="noticeCount != 0" class="notice"></em>
                 </a>
               </li>
-              <li>
-                <a href>
+              <li @click="lookCommentDetail(5)">
+                <a href="javascript:;">
                   评论
-                  <em class="comment"></em>
+                  <em v-show="commentCount != 0" class="comment">{{
+                    commentCount
+                  }}</em>
                 </a>
               </li>
               <li>
                 <a href>
                   关注
-                  <em class="follow"></em>
+                  <em v-show="followCount != 0" class="follow">{{
+                    followCount
+                  }}</em>
                 </a>
               </li>
-              <li>
-                <a href>
+              <li @click="lookLikeDetail(4)">
+                <a href="javascript:;">
                   点赞
-                  <em class="like"></em>
+                  <em v-show="likeCount != 0" class="like">{{ likeCount }}</em>
                 </a>
               </li>
               <li>
                 <a href>
                   私信
-                  <em class="im"></em>
+                  <em v-show="sxCount != 0" class="im"></em>
                 </a>
-              </li>
-              <li>
-                <a href>
-                  回答
-                  <em class="invitition"></em>
-                </a>
-              </li>
-              <li>
-                <a href>
-                  系统通知
-                  <em class="system"></em>
-                </a>
-              </li>
-              <li>
-                <a href>消息设置</a>
               </li>
             </ul>
           </div>
@@ -126,7 +116,13 @@
 </template>
 
 <script>
-import { logout } from "../services/blogService";
+import {
+  commentMsg,
+  likeMsg,
+  logout,
+  lookComment,
+  lookLike,
+} from "../services/blogService";
 // import logo from "../assets/logo.png "
 export default {
   props: {
@@ -141,7 +137,24 @@ export default {
       msg: "",
       searchList: {},
       blogList: [],
+      msgCount: 0, // 消息数
+      noticeCount: 0, // 公告数
+      commentCount: 0, // 评论数
+      followCount: 0, // 关注数
+      likeCount: 0, // 点赞数
+      sxCount: 0, // 私信数
     };
+  },
+  created() {
+    likeMsg().then((v) => {
+      // console.log(v.data.data.length);
+      this.likeCount = v.data.data;
+      // console.log(this.$store.state.likeList);
+    });
+    commentMsg().then((v) => {
+      this.commentCount = v.data.data;
+      console.log(this.commentCount);
+    });
   },
   methods: {
     login() {
@@ -202,6 +215,27 @@ export default {
         query: {
           id: index,
         },
+      });
+    },
+    // 查看点赞详情
+    lookLikeDetail(index) {
+      lookLike().then((v) => {
+        this.$store.commit("setLikeList",v.data.data)
+      });
+      this.$store.commit("changeUserListIndex", index);
+      this.likeCount = 0;
+      this.$router.push({
+        path: "/userinfo",
+      });
+    },
+    lookCommentDetail(index) {
+      lookComment().then(v=>{
+      this.$store.commit("setCommentList", v.data.data);
+      });
+      this.$store.commit("changeUserListIndex", index);
+      this.commentCount = 0;
+      this.$router.push({
+        path: "/userinfo",
       });
     },
   },
@@ -380,19 +414,29 @@ export default {
   margin-top: 14px;
   cursor: pointer;
 }
-.csdn-nav-bar .container .nav-right-menu .collection i {
-  background: url(../assets/collection.png) no-repeat;
-  background-size: contain;
-}
 .csdn-nav-bar .container .nav-right-menu .msg {
   position: relative;
 }
 .csdn-nav-bar .container .nav-right-menu .msg:hover .msgList {
   display: block;
 }
-.csdn-nav-bar .container .nav-right-menu .msg i {
-  background: url(../assets/message.png) no-repeat;
-  background-size: contain;
+.csdn-nav-bar .container .nav-right-menu a {
+  color: #555666;
+  font-size: 14px;
+}
+.csdn-nav-bar .container .nav-right-menu i {
+  /* background: url(../assets/message.png) no-repeat; */
+  /* background-size: contain; */
+  position: absolute;
+  left: 28px;
+  top: 4px;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  background: #e33e33;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  color: #fff;
 }
 .csdn-nav-bar .container .nav-right-menu .msg .msgList {
   display: none;
@@ -426,10 +470,14 @@ export default {
 }
 .csdn-nav-bar .container .nav-right-menu .msg .msgList li a em {
   display: inline-block;
-  margin-left: 8px;
   font-style: normal;
-  color: #e33e33;
-  font-weight: 400;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  background: #e33e33;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  color: #fff;
 }
 .csdn-nav-bar .container .nav-right-menu .user-login {
   position: relative;

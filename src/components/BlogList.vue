@@ -30,6 +30,7 @@
               href="javascript:;"
               @click.stop="beLike($event, index, item.blogId)"
               class="click-heart"
+               :class="{active:item.isLike===1}"
             >
               <Icon type="like"></Icon>
               <span class="num">{{ item.likeCount }}</span>
@@ -54,7 +55,7 @@
 
 <script>
 import Icon from "./Icon";
-import { like } from "../services/blogService";
+import { like, likeMsg } from "../services/blogService";
 export default {
   props: {
     blogList: {},
@@ -62,7 +63,6 @@ export default {
   data() {
     return {
       blogId: null,
-      likeCount:''
     };
   },
   components: {
@@ -78,9 +78,15 @@ export default {
       });
     },
     beLike(e, index, id) {
-      console.log(this.blogList[index].likeCount);
+      console.log(this.blogList[index]);
       // this.isLike[index]=true;
-      like(id);
+      like(id).then(v=> {
+        // if(v.data.isLike===1)
+        this.blogList[index].likeCount=v.data.likeCount
+        this.blogList[index].isLike=v.data.isLike
+        // likeMsg()
+        console.log(v);
+      });
       console.log(this.blogList[index].likeCount);
       // this.likeCount=this.blogList[index].likeCount
     },
@@ -89,7 +95,7 @@ export default {
 </script>
 
 <style scoped>
-@import "//at.alicdn.com/t/font_2080474_2hyrrf0l6mk.css";
+@import "//at.alicdn.com/t/font_2080474_j8vb4q8gzqk.css";
 .blog-list {
   width: 760px;
 }
@@ -126,22 +132,6 @@ export default {
   overflow: hidden;
   white-space: nowrap;
 }
-/* .blog-list li .list-con .title .close-tag {
-  position: absolute;
-  display: inline-block;
-  right: 24px;
-  top: 18px;
-}
-.blog-list li .list-con .title .close-tag i {
-  font-style: normal;
-  display: inline-block;
-  color: #e7e7e7;
-  width: 14px;
-  height: 14px;
-}
-.blog-list li .list-con .title .close-tag i:hover {
-  color: #666;
-} */
 .blog-list li .list-con .list-userbar {
   height: 24px;
   line-height: 24px;
@@ -192,7 +182,7 @@ export default {
 .blog-list li .list-con .list-userbar .interactive a:hover {
   color: #157dcf;
 }
-.blog-list li .list-con .list-userbar .interactive .active {
+.blog-list li .list-con .list-userbar .interactive a.active {
   color: #ca0c16;
 }
 .blog-list li .list-con .list-userbar .interactive .icon {
