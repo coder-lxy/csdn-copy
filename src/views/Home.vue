@@ -2,10 +2,11 @@
   <div class="container clearfix">
     <div class="mainContent clearfix" ref="list" @scroll="handleScroll">
       <div class="main">
-        <BlogList v-show="this.currentIndex === 0" :blogList="hotBlogs"/>       
+        <BlogList v-show="this.currentIndex === 0" :blogList="hotBlogs" />
         <BlogList v-show="this.currentIndex === 1" :blogList="recBlogs" />
         <BlogList v-show="this.currentIndex === 2" :blogList="newestBlogs" />
         <BlogList v-show="this.currentIndex === 3" :blogList="followBlogs" />
+        <BlogList v-show="this.blogs.length != 0&&this.currentIndex==''" :blogList="blogs" />
         <Loading v-show="isLoading"></Loading>
         <!-- <div v-show="blogs.length === 0">{{ remindMsg }}</div> -->
       </div>
@@ -37,6 +38,7 @@ export default {
       recBlogs: [],
       newestBlogs: [],
       followBlogs: [],
+      blogs: [],
       hotPage: 1,
       recPage: 1,
       newPage: 1,
@@ -54,8 +56,8 @@ export default {
   created() {
     this.currentIndex = this.$store.state.blogListIndex;
     this.getCurrentBlogList();
-    getTodayRec().then(v=>{
-      this.RecList=v.data
+    getTodayRec().then((v) => {
+      this.RecList = v.data;
       // console.log(v.data);
     });
   },
@@ -66,7 +68,7 @@ export default {
   methods: {
     getHotBlogList() {
       this.isLoading = true;
-      console.log(this.hotPage);
+      // console.log(this.hotBlogs);
       getHotBlogs(this.hotPage).then((v) => {
         this.hotBlogs = this.hotBlogs.concat(v.data);
         this.hotPage++;
@@ -98,16 +100,16 @@ export default {
       });
     },
     getCurrentBlogList() {
-      if (this.currentIndex===0) {
+      if (this.currentIndex === 0) {
         this.getHotBlogList();
       }
-      if (this.currentIndex===1) {
+      if (this.currentIndex === 1) {
         this.getRecBlogList();
       }
-      if (this.currentIndex===2) {
+      if (this.currentIndex === 2) {
         this.getNewBlogList();
       }
-      if (this.currentIndex===3) {
+      if (this.currentIndex === 3) {
         this.getFollowBlogList();
       }
     },
@@ -139,6 +141,7 @@ export default {
         search(val).then((v) => {
           if (v.data.length != 0) {
             this.blogs = v.data;
+            console.log(this.blogs);
           } else {
             this.remindMsg = "暂时没有您要搜索的东西！";
             this.blogs = [];

@@ -35,7 +35,7 @@ export default {
       this.blog = v.data;
       // console.log(this.blog.userId);
       getUserInfo(this.blog.userId).then((v) => {
-        // console.log(v);
+        console.log(v);
         this.userInfo = v.data;
       });
     });

@@ -53,10 +53,10 @@
           </a>
           <div class="msgList">
             <ul>
-              <li>
-                <a href>
+              <li @click="lookNoticeDetail(6)">
+                <a href="javascript:;">
                   公告
-                  <em v-show="noticeCount != 0" class="notice"></em>
+                  <em v-show="noticeCount != 0" class="notice">{{noticeCount}}</em>
                 </a>
               </li>
               <li @click="lookCommentDetail(5)">
@@ -122,6 +122,8 @@ import {
   logout,
   lookComment,
   lookLike,
+  getNotice,
+  noticeMsg,
 } from "../services/blogService";
 // import logo from "../assets/logo.png "
 export default {
@@ -155,6 +157,9 @@ export default {
       this.commentCount = v.data.data;
       console.log(this.commentCount);
     });
+    noticeMsg().then(v=>{
+      this.noticeCount=v.data.data
+    })
   },
   methods: {
     login() {
@@ -234,6 +239,16 @@ export default {
       });
       this.$store.commit("changeUserListIndex", index);
       this.commentCount = 0;
+      this.$router.push({
+        path: "/userinfo",
+      });
+    },
+    lookNoticeDetail(index) {
+      getNotice().then(v=>{
+        console.log(v);
+      this.$store.commit("setNoticeList", v.data.data);
+      });
+      this.$store.commit("changeUserListIndex", index);
       this.$router.push({
         path: "/userinfo",
       });

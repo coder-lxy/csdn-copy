@@ -3,28 +3,28 @@ import { URL } from "./config";
 // 分页获取新闻
 export async function getHotBlogs(page) {
   var resp = await axios.get(URL + "all/hot/" + page)
-  console.log(resp);
-  return resp;
+  console.log(resp.data);
+  return resp.data;
 }
 export async function getRec(page) {
-  var resp = await axios.post(URL + "user/recommend/"+ page)
-  // console.log(resp);
-  return resp;
+  var resp = await axios.get(URL + "user/recommend/"+ page)
+  console.log(resp.data);
+  return resp.data;
 }
 export async function getNewest(page) {
-  var resp = await axios.post(URL + "all/newest/"+ page)
+  var resp = await axios.get(URL + "all/newest/"+ page)
   // console.log(resp);
-  return resp;
+  return resp.data;
 }
 export async function getTodayRec() {
-  var resp = await axios.post(URL + "all/todayrecommend/")
+  var resp = await axios.get(URL + "all/todayRecommend/")
   // console.log(resp);
-  return resp;
+  return resp.data;
 }
 export async function getFollow(page) {
-  var resp = await axios.post(URL + "user/follow/"+ page)
+  var resp = await axios.get(URL + "user/follow/"+ page)
   // console.log(resp);
-  return resp;
+  return resp.data;
 }
 export async function getBlog(id) {
   var resp = await axios.get(URL + "all/detail/" + id)
@@ -32,7 +32,7 @@ export async function getBlog(id) {
   return resp;
 }
 export async function getUserInfo(id) {
-  var resp = await axios.get(URL + "userinfo/" + id)
+  var resp = await axios.get(URL + "user/info/" + id)
   // console.log(resp);
   return resp;
 }
@@ -42,7 +42,7 @@ export async function login(data) {
   return resp;
 }
 export async function logout() {
-  var resp = await axios.post(URL + "user/logout/")
+  var resp = await axios.get(URL + "user/logout/")
   console.log(resp);
   return resp;
 }
@@ -57,12 +57,12 @@ export async function edit(data) {
   return resp;
 }
 export async function like(id) {
-  var resp = await axios.post(URL + "user/like/" + id)
+  var resp = await axios.get(URL + "user/like/" + id)
   console.log(resp);
   return resp.data;
 }
 export async function renewal() {
-  var resp = await axios.post(URL + "islogin/")
+  var resp = await axios.get(URL + "islogin/")
   // console.log(resp);
   return resp;
 }
@@ -77,7 +77,7 @@ export async function uploadEditorImg(formData) {
   return resp;
 }
 export async function getClassify(id) {
-  var resp = await axios.post(URL + "gettype/" + id)
+  var resp = await axios.get(URL + "gettype/" + id)
   // console.log(resp);
   return resp;
 
@@ -88,13 +88,13 @@ export async function search(msg) {
   return resp;
 }
 export async function publish(msg) {
-  var resp = await axios.post(URL + "editor/", msg)
+  var resp = await axios.post(URL + "user/editor/", msg)
   // console.log(resp);
   return resp;
 }
 
 export async function getComment(blogId) {
-  var resp = await axios.post(URL + "comment/" + blogId)
+  var resp = await axios.get(URL + "comment/" + blogId)
   // console.log(resp);
   return resp;
 }
@@ -109,22 +109,46 @@ export async function getUserBlogs(userId) {
   return resp;
 }
 export async function likeMsg() {
-  var resp = await axios.post(URL + "msg/like/")
+  var resp = await axios.get(URL + "msg/like/")
   console.log(resp);
   return resp;
 }
 export async function lookLike() {
-  var resp = await axios.post(URL + "msg/likedetail/")
+  var resp = await axios.get(URL + "msg/likedetail/")
   console.log(resp);
   return resp;
 }
 export async function commentMsg() {
-  var resp = await axios.post(URL + "msg/comment/")
+  var resp = await axios.get(URL + "msg/comment/")
   console.log(resp);
   return resp;
 }
 export async function lookComment() {
-  var resp = await axios.post(URL + "msg/commentdetail/")
+  var resp = await axios.get(URL + "msg/commentdetail/")
+  console.log(resp);
+  return resp;
+}
+// 获取公告数量
+export async function noticeMsg() {
+  var resp = await axios.get(URL + "msg/notice/")
+  console.log(resp);
+  return resp;
+}
+// 获取公告列表
+export async function getNotice() {
+  var resp = await axios.get(URL + "msg/noticedetail/")
+  console.log(resp);
+  return resp;
+}
+// 查看公告
+export async function lookNotice(id) {
+  var resp = await axios.get(URL + "msg/noticedetail/"+id)
+  console.log(resp);
+  return resp;
+}
+// 发布公告
+export async function pubNotice(obj) {
+  var resp = await axios.post(URL + "admin/notice/",obj)
   console.log(resp);
   return resp;
 }

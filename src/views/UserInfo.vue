@@ -12,6 +12,7 @@
         <MsgContent v-show="this.$store.state.userListIndex===3" :list=this.$store.state.commentList></MsgContent>
         <MsgContent v-show="this.$store.state.userListIndex===4" :list=this.$store.state.likeList></MsgContent>
         <MsgContent v-show="this.$store.state.userListIndex===5" :list=this.$store.state.commentList></MsgContent>
+        <MsgContent v-show="this.$store.state.userListIndex===6" :list=this.$store.state.noticeList></MsgContent>
         <!-- <MyBlogs></MyBlogs> -->
         <!-- <ViewContainer></ViewContainer> -->
       </div>
@@ -38,6 +39,9 @@ export default {
       index:this.$store.state.userListIndex,
       blogList:[]
     }
+  },
+  created(){
+    console.log(this.$store.state.noticeList);
   },
   methods:{
     myBlogs() {

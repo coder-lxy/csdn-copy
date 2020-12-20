@@ -104,7 +104,7 @@ export default {
     toLogin() {
       login(this.userInfo).then((v) => {
         console.log(v);
-        this.loginMsg = v.data;
+        this.loginMsg = v.data.msg;
         if (v.data.code === 0) {
           var startTime = Date.now();
           localStorage.setItem("startTime", startTime);

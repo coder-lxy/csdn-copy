@@ -1,21 +1,32 @@
 <template>
   <div class="msg-list">
-    <ul>
+    <!-- <ul>
       <li v-for="(item,index) in list" :key="index">
         <span>
           <a href="">{{ item.remindContent }}</a>
-          <!-- 点赞了你的博文 -->
         </span>
-        <!-- <p>{{ msg.title }}</p> -->
+      </li>
+    </ul> -->
+    <ul>
+      <li v-for="(item,index) in list" :key="index" @click="lookNoticeDetail(item.noticeId)">
+        <span>{{item.noticeTitle}}</span>
+        <span>{{item.noticeContent}}</span>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import { lookNotice } from '../services/blogService';
 export default {
   props:{
     list:[]
+  },
+  methods:{
+    lookNoticeDetail(id) {
+      alert(11)
+      lookNotice(id)
+    }
   }
 };
 </script>

@@ -10,7 +10,8 @@ var store = new Vuex.Store({
     blogListIndex:0,
     userListIndex:0,
     likeList:[],
-    commentList:[]
+    commentList:[],
+    noticeList:[]
   },
   getters:{
     // 获取token方法
@@ -54,6 +55,9 @@ var store = new Vuex.Store({
     },
     setCommentList(state,value) {
       state.commentList=value
+    },
+    setNoticeList(state,value) {
+      state.noticeList=value
     }
   },
   
