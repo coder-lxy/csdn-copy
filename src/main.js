@@ -17,9 +17,10 @@ axios.interceptors.request.use(config => {
   //登录成功后将后台返回的TOKEN在本地存下来,每次请求从sessionStorage中拿到存储的TOKEN值 
 
   let token = localStorage.getItem('token');
+  console.log(token);
   let userInfo = localStorage.getItem('userInfo')
   if (token) {
-    // console.log(userInfo);
+    console.log(userInfo);
     store.commit('setToken',token)
     store.commit('setUserInfo', JSON.parse(userInfo))
     // console.log(userInfo);
@@ -58,6 +59,7 @@ axios.interceptors.response.use(response => {
     })
   }
   let token = response.headers.token;
+  console.log(token);
   if (token) {
     let userInfo = response.data.data
     //如果请求时TOKEN存在,就为每次请求的headers中设置好TOKEN,后台根据headers中的TOKEN判断是否放行 

@@ -447,19 +447,19 @@ export default {
       this.classify.splice(index, 1);
     },
     pubArticle() {
-      this.notice.title = this.title;
-      this.notice.article = this.content;
-      // this.newBlog.title = this.title;
-      // this.newBlog.article = this.content;
-      // console.log(this.newBlog.article);
-      // this.newBlog.types = this.classify;
-      // this.newBlog.labels = this.selectedTags;
-      // publish(this.newBlog).then((v) => {
-      //   this.$router.push({
-      //     path:'/'
-      //   })
-      // });
-      pubNotice(this.notice)
+      // this.notice.title = this.title;
+      // this.notice.article = this.content;
+      this.newBlog.title = this.title;
+      this.newBlog.article = this.content;
+      console.log(this.newBlog.article);
+      this.newBlog.types = this.classify;
+      this.newBlog.labels = this.selectedTags;
+      publish(this.newBlog).then((v) => {
+        this.$router.push({
+          path:'/'
+        })
+      });
+      // pubNotice(this.notice)
     },
   },
 };
