@@ -33,8 +33,8 @@ export async function getBlog(id) {
 }
 export async function getUserInfo(id) {
   var resp = await axios.get(URL + "user/info/" + id)
-  // console.log(resp);
-  return resp;
+  console.log(resp);
+  return resp.data;
 }
 export async function login(data) {
   var resp = await axios.post(URL + "login/", data)
