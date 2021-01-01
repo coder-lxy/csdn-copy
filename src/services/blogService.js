@@ -29,7 +29,7 @@ export async function getFollow(page) {
 export async function getBlog(id) {
   var resp = await axios.get(URL + "all/detail/" + id)
   // console.log(resp);
-  return resp;
+  return resp.data;
 }
 export async function getUserInfo(id) {
   var resp = await axios.get(URL + "user/info/" + id)

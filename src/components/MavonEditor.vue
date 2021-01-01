@@ -57,6 +57,7 @@ export default {
       // render 为 markdown 解析后的结果[html]
       this.html = render;
       this.$emit("getContent", this.content);
+      console.log(this.content);
     },
   },
   mounted() {},

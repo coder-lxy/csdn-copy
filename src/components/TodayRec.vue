@@ -92,7 +92,9 @@ export default {
 }
 .recommendBox .rec-content li .content-box {
   float: left;
+  width: 180px;
   padding-top: 2px;
+  text-overflow: ellipsis;
 }
 .recommendBox .rec-content li .content-box h3 a {
   color: #3d3d3d;
