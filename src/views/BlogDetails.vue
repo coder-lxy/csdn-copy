@@ -2,7 +2,7 @@
   <div class="container">
     <AsideProfile :userInfo="userInfo" class="aside" />
     <div class="main">
-      <Blog :blog="blog" />
+      <Blog :news="blog" />
       <Comment :blogId="blog.blogId" :comments="comments"></Comment>
     </div>
   </div>

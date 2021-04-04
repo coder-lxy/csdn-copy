@@ -1,183 +1,135 @@
 <template>
-  <div class="blog-content-box">
-    <div class="article-header-box">
-      <div class="article-title-box">
-        <h1>{{blog.title}}</h1>
-      </div>
-      <div class="article-info-box">
-        <div class="bar-content">
-          <a href class="nickname">{{blog.username}}</a>
-          <span class="time">{{blog.createDate}}</span>
-          <img src="../assets/articleReadEyes.png" alt class="article-read-img" />
-          <span class="read-count">{{blog.hitCount}}</span>
-          <a href class="collection">
-            <img src="../assets/tobarCollect.png" alt="" class="un-collect" />
-            <img src alt class="collect" />
-            <span class="name">收藏</span>
-          </a>
-        </div>
-      </div>
-    </div>
-    <div v-html="blog.article" class="article-content">
-    </div>
+  <div class="detail_news">
+    <el-row class="article-title">
+      <el-col :span="24">
+        <h1>{{ news.title }}</h1>
+      </el-col>
+    </el-row>
+    <el-row class="article-info-box">
+      <el-col :span="2">
+        <el-link :underline="false" @click="toUserCenter(news.userId)">{{
+          news.username
+        }}</el-link>
+      </el-col>
+      <el-col :span="6">{{ news.createDate }}</el-col>
+      <el-col :span="2">
+        <Icon type="hit"></Icon>
+        <span class="read-count">{{ news.hitCount }}</span>
+      </el-col>
+      <el-col :span="2">
+        <Icon type="collect"></Icon>
+        <span class="read-count">{{ news.hitCount }}</span>
+      </el-col>
+    </el-row>
+    <div v-html="news.article" class="article-content"></div>
     <div class="more-toolbox">
-      <ul class="toolbox-list">
-        <li class="tool-item">
-          <a href="javascript:;" @click="beLike(blog.blogId)">
-            <img style="display:none" class="like-imgActive" src="../assets/tobarThumbUpactive.png" alt="">
-            <img class="like-img" src="../assets/tobarThumbUp.png" alt="">
-            <span class="name" >点赞</span>
-            <span class="count">{{blog.likeCount}}</span>
-          </a>
-        </li>
-        <li class="tool-item">
-          <a href="">
-            <img style="display:none" class="like-imgActive" src="../assets/tobarThumbUpactive.png" alt="">
-            <img class="like-img" src="../assets/tobarComment.png" alt="">
-            <span class="name">评论</span>
-            <span class="count">{{blog.commentCount}}</span>
-          </a>
-        </li>
-        <li class="tool-item">
-          <a href="">
-            <img style="display:none" class="collect-imgActive" src="../assets/tobarCollectionActive.png" alt="">
-            <img class="collect-img" src="../assets/tobarCollect.png" alt="">
-            <span class="name">收藏</span>
-            <span class="count"></span>
-          </a>
-        </li>
-      </ul>
+      <el-row class="toolbox-list">
+        <el-col :span="3">
+          <el-link
+            :underline="false"
+            @click="changeLike(news.blogId)"
+            :class="{ active: news.isLike === 1 }"
+          >
+            <Icon type="like"></Icon>
+            <span> {{ news.isLike === 1 ? '已赞' : '点赞' }}</span
+            >{{ news.likeCount }}
+          </el-link>
+        </el-col>
+        <el-col :span="3">
+          <el-link :underline="false" href="#comment">
+            <Icon type="comment"></Icon>
+            <span>评论{{ news.commentCount }}</span>
+          </el-link>
+        </el-col>
+        <el-col :span="3">
+          <el-link :underline="false" @click="toCollect(news.blogId)">
+            <Icon type="collect"></Icon>
+            <span>收藏{{ news.collect }}</span>
+          </el-link>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
 
 <script>
-import { like } from '../services/blogService';
+import Icon from './Icon'
+import { collect, like } from '@/services/blogService'
 export default {
   props: {
-    blog: {},
+    news: {},
   },
-  methods:{
-    beLike(id) {
-      like(id)
+  components: {
+    Icon,
+  },
+  methods: {
+    changeLike(id) {
+      like(id).then((v) => {
+        this.news.likeCount = v.data.data.likeCount
+        this.news.isLike = v.data.data.isLike
+      })
+    },
+    toUserCenter(id) {
+      this.$router.push({
+        path: '/user',
+        query: {
+          id: id,
+        },
+      })
+    },
+    // 收藏文章
+    toCollect(arg) {
+      collect(this.$store.getters['base/userInfo'].userId, arg).then(v => {
+        console.log(v);
+      })
     }
-  }
-};
+  },
+}
 </script>
 
 <style scoped>
-.blog-content-box {
+.detail_news {
   position: relative;
+  width: 980px;
+  min-height: 300px;
   padding: 0 24px 16px;
   background: #fff;
   margin-bottom: 10px;
 }
-.blog-content-box .article-header-box {
-  padding-top: 8px;
-  border-bottom: 1px solid #f5f5f5;
-}
-.blog-content-box .article-header-box .article-title-box {
+.el-row.article-title {
+  height: 42px;
+  line-height: 42px;
   margin-bottom: 8px;
 }
-.blog-content-box .article-header-box .article-title-box h1 {
+.el-row.article-title h1 {
   font-size: 24px;
   color: #222226;
   font-weight: 600;
   word-break: break-all;
 }
-.blog-content-box .article-header-box .article-info-box {
-  height: 32px;
-  line-height: 32px;
-  background: #f7f7fc;
-  border-radius: 4px;
+.article-content {
+  padding-top: 20px;
+  min-height: 300px;
 }
-.blog-content-box .article-header-box .article-info-box .bar-content {
-  float: left;
+.el-row.article-info-box {
   height: 32px;
   line-height: 32px;
   padding-left: 10px;
-}
-.blog-content-box .bar-content .nickname{
-  color: #5893c2;
-  margin-right: 20px;
-}
-.blog-content-box .bar-content .time {
-  color: #999aaa;
-  font-size: 12px;
-  margin-right: 12px;
-  line-height: 32px;
-}
-.blog-content-box .bar-content .article-read-img {
-  width: 20px;
-  height: 20px;
-  vertical-align: middle;
-}
-.blog-content-box .bar-content .read-count {
-  color: #999aaa;
-  font-size: 12px;
-  margin-right: 12px;
-}
-.blog-content-box .bar-content a {
-  color: #999aaa;
-  display: inline-block;
-  margin-right: 12px;
-  line-height: 32px;
-  font-size: 12px;
-}
-.blog-content-box .bar-content a img {
-  width: 20px;
-  height: 20px;
-  vertical-align: middle;
-  margin-right: 2px;
-}
-.blog-content-box .article-content {
-  padding-top: 16px;
-  padding-bottom: 48px;
-}
-.blog-content-box .more-toolbox {
-  width: 100%;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-}
-.blog-content-box .more-toolbox ul {
-  /* width: 1010px; */
-  height: 38px;
-  line-height: 38px;
-  display: flex;
-  align-items: center;
-  padding-left: 24px;
-  background: #f3f7fb;
-  box-shadow: 0 3px 5px 0 rgba(0,0,0,0.05);
-}
-.blog-content-box .more-toolbox ul li {
+  background: #f7f7fc;
   border-radius: 4px;
-  font-size: 12px;
-  height: 30px;
-  line-height: 30px;
-}
-.blog-content-box .more-toolbox ul li a {
-  display: flex;
-  height: 36px;
-  align-items: center;
-  padding: 0 12px;
-}
-.blog-content-box .more-toolbox ul li:hover {
-  background: rgba(39,124,204,0.1);
-}
-.blog-content-box .more-toolbox ul .tool-item img {
-  width: 22px;
-  height: 22px;
-  margin-right: 4px;
-}
-.blog-content-box .more-toolbox ul .tool-item .name {
+  color: #999aaa;
   font-size: 14px;
-  color: #555666;
 }
-.blog-content-box .more-toolbox ul .tool-item .count{
-  margin-top: -8px;
-  margin-left: 2px;
-  font-size: 12px;
-  color: #555666;
+.el-row.toolbox-list {
+  height: 32px;
+  line-height: 32px;
+  padding-left: 10px;
+  background: #f7f7fc;
+  border-radius: 4px;
+  color: #999aaa;
+  font-size: 14px;
+}
+.el-link.active {
+  color: #ca0c16;
 }
 </style>

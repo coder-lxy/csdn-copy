@@ -1,5 +1,40 @@
 import axios from "axios";
 import { URL } from "./config";
+// 用户模块：
+// 注册
+export async function register(data) {
+  var resp = await axios.post(URL+"register/", data)
+  return resp;
+}
+// 登录
+export async function login(data) {
+  var resp = await axios.post(URL + "login/", data)
+  return resp;
+}
+// 登出
+export async function logout() {
+  var resp = await axios.get(URL + "user/logout/")
+  return resp;
+}
+// 修改用户信息
+export async function updateUserInfo(data) {
+  var resp = await axios.post(URL + "user/updateUserByUserId/", data)
+  // console.log(resp);
+  return resp;
+}
+// 上传头像
+export async function uploadImg(formData) {
+  var resp = await axios.post(URL + "user/uploadImage/", formData)
+  // console.log(resp);
+  return resp;
+}
+// 获取用户信息
+export async function getUserInfo(id) {
+  var resp = await axios.get(URL + "all/info/" + id)
+  return resp.data;
+}
+
+// 新闻模块
 // 获取热榜新闻
 export async function getHotBlogs(data) {
   var resp = await axios.post(URL + "all/hot/", data)
@@ -27,36 +62,37 @@ export async function getTodayRec() {
   // console.log(resp);
   return resp.data;
 }
-
+// 获取评论
+export async function getComment(data) {
+  var resp = await axios.post(URL + "all/getCommentVOByBlogId/", data)
+  return resp;
+}
+// 发布评论
+export async function pubComment(comment) {
+  var resp = await axios.post(URL + "user/publishcomment/", comment)
+  return resp;
+}
+// 删除评论
+export async function delComment(id) {
+  var resp = await axios.get(URL + "user/deleteCommentByCommentId?commentId=" + id)
+  return resp;
+}
 export async function getBlog(id) {
   var resp = await axios.get(URL + "all/detail/" + id)
   // console.log(resp);
   return resp.data;
-}
-export async function getUserInfo(id) {
-  var resp = await axios.get(URL + "all/info/" + id)
-  return resp.data;
-}
-export async function login(data) {
-  var resp = await axios.post(URL + "login/", data)
-  // console.log(resp);
-  return resp;
-}
-export async function logout() {
-  var resp = await axios.get(URL + "user/logout/")
-  console.log(resp);
-  return resp;
-}
-export async function register(data) {
-  var resp = await axios.post(URL + "register/", data)
-  // console.log(resp);
-  return resp;
 }
 // 根据用户id 获取新闻列表(按最后发布时间)
 export async function getUserNewsList(data) {
   var resp = await axios.post(URL + "all/user", data)
   console.log(resp);
   return resp;
+}
+// 获取收藏的文章
+export async function collectList(id) {
+  var resp = await axios.get(URL + 'collect/select/' + id) 
+    console.log(resp);
+    return resp
 }
 export async function edit(data) {
   var resp = await axios.post(URL + "editormd/", data)
@@ -70,11 +106,6 @@ export async function like(id) {
 }
 export async function renewal() {
   var resp = await axios.get(URL + "islogin/")
-  // console.log(resp);
-  return resp;
-}
-export async function uploadImg(formData) {
-  var resp = await axios.post(URL + "user/uploadImage/", formData)
   // console.log(resp);
   return resp;
 }
@@ -96,17 +127,6 @@ export async function search(msg) {
 }
 export async function publish(msg) {
   var resp = await axios.post(URL + "user/publish/", msg)
-  // console.log(resp);
-  return resp;
-}
-
-export async function getComment(blogId) {
-  var resp = await axios.get(URL + "comment/" + blogId)
-  // console.log(resp);
-  return resp;
-}
-export async function pubComment(comment) {
-  var resp = await axios.post(URL + "user/publishcomment/", comment)
   // console.log(resp);
   return resp;
 }

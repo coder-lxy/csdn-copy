@@ -95,15 +95,11 @@
         </li>
         <li v-if="this.$store.getters['base/token']" class="user-login">
           <a href="javascript:;">
-            <img @click="toUserInfo(0)" :src="headUrl" alt="" />
+            <img @click="toUserInfo" :src="headUrl" alt="" />
           </a>
           <div class="userControl">
-            <div
-              @click="toUserInfo(index)"
-              v-for="(item, index) in Mylist"
-              :key="index"
-            >
-              <a href="javascript:;">{{ item }}</a>
+            <div>
+              <a @click="toUserInfo" href="javascript:;">用户中心</a>
             </div>
             <div class="logout">
               <a @click="toLogout" href="javascript:;">退出登录</a>
@@ -127,12 +123,9 @@ import {
 } from "../services/blogService";
 // import logo from "../assets/logo.png "
 export default {
-  props: {
-    isLogin: false,
-    userInfo: {},
-  },
   data() {
     return {
+      userId: '',
       navList: [
         { name: "热榜", path:'/' },
         { name: "推荐", path:'/rec' },
@@ -153,8 +146,8 @@ export default {
     };
   },
   created() {
-    console.log('headUrl', this.$store.getters['base/userInfo'].headUrl);
     this.headUrl =  this.$store.getters['base/userInfo'].headUrl
+    this.userId = this.$store.getters['base/userInfo'].userId
     likeMsg().then((v) => {
       // console.log(v.data.data.length);
       this.likeCount = v.data.data;
@@ -176,7 +169,6 @@ export default {
       });
     },
     toLogout() {
-      // console.log(this.$store.state.isLogin);
       logout().then((v) => {
         localStorage.removeItem('token')
         localStorage.removeItem('userInfo')
@@ -212,14 +204,13 @@ export default {
         path: "/",
       });
     },
-    toUserInfo(index) {
-      this.$store.commit("changeBlogListIndex", "");
+    toUserInfo() {
       this.$router.push({
-        path: "/userinfo",
+        path: '/user',
         query: {
-          id: index
-        }
-      });
+          id: this.$store.getters['base/userInfo'].userId,
+        },
+      })
     },
     // 查看点赞详情
     lookLikeDetail(index) {

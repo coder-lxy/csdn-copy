@@ -1,13 +1,9 @@
 <template>
   <div id="app">
     <Nav
-      :isLogin="this.$store.state.isLogin"
-      :userInfo="this.$store.state.userInfo"
-      :currentIndex="this.$store.state.blogListIndex"
-    ></Nav>
-    <div>
+      :userInfo="this.$store.state.userInfo">
+    </Nav>
       <router-view></router-view>
-    </div>
   </div>
 </template>
 

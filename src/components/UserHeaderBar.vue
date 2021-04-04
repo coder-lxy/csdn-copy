@@ -16,12 +16,10 @@
 </template>
 
 <script>
-import { uploadEditorImg, getUserInfo, uploadImg } from "../services/blogService";
+import { getUserInfo, uploadImg } from "@/services/blogService";
 export default {
-  data() {
-    return {
-      user: this.$store.state.userInfo,
-    };
+  props: {
+    user: null
   },
   created() {
     console.log(this.user);
@@ -30,21 +28,16 @@ export default {
     //上传图片
     uploadFile(event) {
       var file = event.target.files[0]; //获取input的图片file值
-      console.log(file);
       var formData = new FormData(); // 创建form对象
       formData.append("file", file); //对应后台接收图片名
-      console.log(formData);
       uploadImg(formData).then((v) => {
         this.resetUser()
-        // console.log(v);
-        // this.imgUrl = v.data.msg;
-        // console.log(this.imgUrl);
       });
     },
      // 更新localStorage
     resetUser() {
       getUserInfo(this.user.userId).then(v => {
-        this.$store.commit('userInfo', v.data.user)
+        this.$store.commit('base/userInfo', v.data.user)
         this.imgUrl = v.data.user.headUrl
       })
     }

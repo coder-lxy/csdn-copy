@@ -32,9 +32,9 @@ export default {
       component:()=>import("@/views/BlogDetails")
     },
     {
-      path:"/userinfo",
+      path:"/user",
       name:"UserInfo",
-      component:()=>import("@/views/user-center/UserInfo")
+      component:()=>import("@/views/user-center/UserCenter")
     },
     {
       path:"/editor",

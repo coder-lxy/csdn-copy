@@ -90,8 +90,7 @@ export default {
     Icon,
   },
   created() {
-    this.currentUserId = this.$store.state.userInfo.userId
-    console.log('111', this.currentUserId);
+    this.currentUserId = this.$store.getters['base/userInfo'].userId
     this.requestData.id = this.userId
     this.getNewsList('createDate')
   },

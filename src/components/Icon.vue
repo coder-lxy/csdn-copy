@@ -4,9 +4,16 @@
 
 <script>
 var map = {
-  like:'icon-dianzan',
-  hit:'icon-hit',
-  comment:'icon-pinglun'
+  like: 'icon-dianzan',
+  hit: 'icon-hit',
+  comment:'icon-pinglun',
+  grzx: 'icon-gerenzhongxin',
+  tuichu: 'icon-tuichu',
+  collect: 'icon-shoucang',
+  folder: 'icon-folder',
+  newfolder: 'icon-newfolder',
+  wenjian: 'icon-wenjian',
+  edit: 'icon-edit'
 }
 export default {
   props:{
@@ -28,4 +35,5 @@ export default {
 </script>
 
 <style>
+@import "//at.alicdn.com/t/font_2080474_y6fe5en56x.css";
 </style>

@@ -55,7 +55,7 @@
 
 <script>
 import Icon from "./Icon";
-import { like, likeMsg } from "../services/blogService";
+import { like, likeMsg } from "@/services/blogService";
 export default {
   props: {
     blogList: {},
@@ -95,7 +95,6 @@ export default {
 </script>
 
 <style scoped>
-@import "//at.alicdn.com/t/font_2080474_j8vb4q8gzqk.css";
 .blog-list {
   width: 760px;
 }
