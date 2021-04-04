@@ -1,18 +1,18 @@
 <template>
   <div class="msg-list">
-    <!-- <ul>
+    <ul>
       <li v-for="(item,index) in list" :key="index">
         <span>
           <a href="">{{ item.remindContent }}</a>
         </span>
       </li>
-    </ul> -->
-    <ul>
+    </ul>
+    <!-- <ul>
       <li v-for="(item,index) in list" :key="index" @click="lookNoticeDetail(item.noticeId)">
         <span>{{item.noticeTitle}}</span>
-        <span>{{item.noticeContent}}</span>
+        <span>{{item.remindContent}}</span>
       </li>
-    </ul>
+    </ul> -->
   </div>
 </template>
 

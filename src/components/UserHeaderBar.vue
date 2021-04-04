@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { uploadEditorImg, uploadImg } from "../services/blogService";
+import { uploadEditorImg, getUserInfo, uploadImg } from "../services/blogService";
 export default {
   data() {
     return {
@@ -35,11 +35,19 @@ export default {
       formData.append("file", file); //对应后台接收图片名
       console.log(formData);
       uploadImg(formData).then((v) => {
+        this.resetUser()
         // console.log(v);
-        this.imgUrl = v.data.msg;
+        // this.imgUrl = v.data.msg;
         // console.log(this.imgUrl);
       });
     },
+     // 更新localStorage
+    resetUser() {
+      getUserInfo(this.user.userId).then(v => {
+        this.$store.commit('userInfo', v.data.user)
+        this.imgUrl = v.data.user.headUrl
+      })
+    }
   },
 };
 </script>

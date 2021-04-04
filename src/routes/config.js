@@ -3,8 +3,23 @@ export default {
   routes:[
     {
       path:"/",
-      name:"Home",
-      component:()=>import("@/views/Home")
+      name:"Hot",
+      component:()=>import("@/views/HotBlogList")
+    },
+    {
+      path:"/rec",
+      name:"Rec",
+      component:()=>import("@/views/RecBlogList")
+    },
+    {
+      path:"/new",
+      name:"New",
+      component:()=>import("@/views/NewestBlogList")
+    },
+    {
+      path:"/follow",
+      name:"Follow",
+      component:()=>import("@/views/FollowBlogList")
     },
     {
       path:"/login",
@@ -19,7 +34,7 @@ export default {
     {
       path:"/userinfo",
       name:"UserInfo",
-      component:()=>import("@/views/UserInfo")
+      component:()=>import("@/views/user-center/UserInfo")
     },
     {
       path:"/editor",

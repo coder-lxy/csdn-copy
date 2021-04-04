@@ -15,10 +15,10 @@
           v-for="(item, index) in navList"
           :key="index"
           class="sub-menu-box"
-          @click="changeBlogList(index)"
+          @click="changeBlogList(item.path, index)"
           :class="{ active: currentIndex === index }"
         >
-          <a href="javascript:;">{{ item }}</a>
+          <a href="javascript:;">{{ item.name }}</a>
         </li>
         <div class="serch-bar">
           <input
@@ -90,12 +90,12 @@
             </ul>
           </div>
         </li>
-        <li v-show="!this.$store.state.isLogin" @click="login" class="userinfo">
+        <li v-if="!this.$store.getters['base/token']" @click="login" class="userinfo">
           <a href="javascript:;">登录/注册</a>
         </li>
-        <li v-show="isLogin" class="user-login">
+        <li v-if="this.$store.getters['base/token']" class="user-login">
           <a href="javascript:;">
-            <img @click="toProfile()" :src="userInfo.headUrl" alt="" />
+            <img @click="toUserInfo(0)" :src="headUrl" alt="" />
           </a>
           <div class="userControl">
             <div
@@ -130,15 +130,20 @@ export default {
   props: {
     isLogin: false,
     userInfo: {},
-    currentIndex: "",
   },
   data() {
     return {
-      navList: ["热榜", "推荐", "最新", "关注"],
+      navList: [
+        { name: "热榜", path:'/' },
+        { name: "推荐", path:'/rec' },
+        { name: "最新", path:'/new' },
+        { name: "关注", path:'/follow' }],
+      currentIndex: 0,
       Mylist: ["我的收藏", "我的关注", "我的粉丝", "我的博客"],
       msg: "",
       searchList: {},
       blogList: [],
+      headUrl : '',
       msgCount: 0, // 消息数
       noticeCount: 0, // 公告数
       commentCount: 0, // 评论数
@@ -148,6 +153,8 @@ export default {
     };
   },
   created() {
+    console.log('headUrl', this.$store.getters['base/userInfo'].headUrl);
+    this.headUrl =  this.$store.getters['base/userInfo'].headUrl
     likeMsg().then((v) => {
       // console.log(v.data.data.length);
       this.likeCount = v.data.data;
@@ -171,21 +178,19 @@ export default {
     toLogout() {
       // console.log(this.$store.state.isLogin);
       logout().then((v) => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("userInfo");
-        this.$store.commit("changeIsLogin", false);
-        this.$store.commit("removeUserInfo");
-
+        localStorage.removeItem('token')
+        localStorage.removeItem('userInfo')
+        this.$store.commit('base/token', '')
+        this.$store.commit('base/userInfo', null)
         this.$router.push({
-          path: "/",
-          // query:''
-        });
-      });
+          path: '/',
+        })
+      })
     },
-    changeBlogList(index) {
-      this.$store.commit("changeBlogListIndex", index);
+    changeBlogList(path, index) {
+      this.currentIndex = index
       this.$router.push({
-        path: "/",
+        path: path,
       });
     },
     toWrite() {
@@ -200,12 +205,6 @@ export default {
         });
       }
     },
-    toProfile() {
-      this.$store.commit("changeBlogListIndex", "");
-      this.$router.push({
-        path: "/userinfo",
-      });
-    },
     toSearch(msg) {
       this.$store.commit("changeBlogListIndex", "");
       this.$store.commit("changeSearchKey", msg);
@@ -218,40 +217,41 @@ export default {
       this.$router.push({
         path: "/userinfo",
         query: {
-          id: index,
-        },
+          id: index
+        }
       });
     },
     // 查看点赞详情
     lookLikeDetail(index) {
-      lookLike().then((v) => {
-        this.$store.commit("setLikeList",v.data.data)
-      });
-      this.$store.commit("changeUserListIndex", index);
+      // lookLike().then((v) => {
+      //   this.$store.commit("setLikeList", v.data.data)
+      // });
       this.likeCount = 0;
-      this.$router.push({
-        path: "/userinfo",
-      });
+      this.toUserInfo(index)
     },
+    // 查看评论详情
     lookCommentDetail(index) {
-      lookComment().then(v=>{
-      this.$store.commit("setCommentList", v.data.data);
-      });
-      this.$store.commit("changeUserListIndex", index);
+      // lookComment().then(v=>{
+      // this.$store.commit("setCommentList", v.data.data);
+      // });
+      // this.$store.commit("changeUserListIndex", index);
       this.commentCount = 0;
-      this.$router.push({
-        path: "/userinfo",
-      });
+      this.toUserInfo(index)
+      // this.$router.push({
+      //   path: "/userinfo",
+      // });
     },
     lookNoticeDetail(index) {
-      getNotice().then(v=>{
-        console.log(v);
-      this.$store.commit("setNoticeList", v.data.data);
-      });
-      this.$store.commit("changeUserListIndex", index);
-      this.$router.push({
-        path: "/userinfo",
-      });
+      // getNotice().then(v=>{
+      //   console.log(v);
+      // this.$store.commit("setNoticeList", v.data.data);
+      // });
+      // this.$store.commit("changeUserListIndex", index);
+      this.noticeCount = 0
+      this.toUserInfo(index)
+      // this.$router.push({
+      //   path: "/userinfo",
+      // });
     },
   },
 };

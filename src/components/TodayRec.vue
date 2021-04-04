@@ -26,7 +26,12 @@
 <script>
 export default {
   props: {
-    todayRec: [],
+    todayRec: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
   },
   methods: {
     toDetail(id) {

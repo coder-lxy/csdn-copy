@@ -1,39 +1,40 @@
 import axios from "axios";
 import { URL } from "./config";
-// 分页获取新闻
-export async function getHotBlogs(page) {
-  var resp = await axios.get(URL + "all/hot/" + page)
-  console.log(resp.data);
+// 获取热榜新闻
+export async function getHotBlogs(data) {
+  var resp = await axios.post(URL + "all/hot/", data)
   return resp.data;
 }
-export async function getRec(page) {
-  var resp = await axios.get(URL + "user/recommend/"+ page)
-  console.log(resp.data);
+// 获取推荐新闻
+export async function getRec(data) {
+  var resp = await axios.post(URL + "user/recommend/", data)
   return resp.data;
 }
+// 获取最新发布新闻
 export async function getNewest(page) {
   var resp = await axios.get(URL + "all/newest/"+ page)
-  // console.log(resp);
   return resp.data;
 }
-export async function getTodayRec() {
-  var resp = await axios.get(URL + "all/todayRecommend/")
-  // console.log(resp);
-  return resp.data;
-}
+// 获取关注动态
 export async function getFollow(page) {
   var resp = await axios.get(URL + "user/follow/"+ page)
   // console.log(resp);
   return resp.data;
 }
+// 获取今日推荐新闻
+export async function getTodayRec() {
+  var resp = await axios.get(URL + "all/todayRecommend/")
+  // console.log(resp);
+  return resp.data;
+}
+
 export async function getBlog(id) {
   var resp = await axios.get(URL + "all/detail/" + id)
   // console.log(resp);
   return resp.data;
 }
 export async function getUserInfo(id) {
-  var resp = await axios.get(URL + "user/info/" + id)
-  console.log(resp);
+  var resp = await axios.get(URL + "all/info/" + id)
   return resp.data;
 }
 export async function login(data) {
@@ -49,6 +50,12 @@ export async function logout() {
 export async function register(data) {
   var resp = await axios.post(URL + "register/", data)
   // console.log(resp);
+  return resp;
+}
+// 根据用户id 获取新闻列表(按最后发布时间)
+export async function getUserNewsList(data) {
+  var resp = await axios.post(URL + "all/user", data)
+  console.log(resp);
   return resp;
 }
 export async function edit(data) {
@@ -67,7 +74,7 @@ export async function renewal() {
   return resp;
 }
 export async function uploadImg(formData) {
-  var resp = await axios.post(URL + "uploadimage/", formData)
+  var resp = await axios.post(URL + "user/uploadImage/", formData)
   // console.log(resp);
   return resp;
 }
@@ -88,7 +95,7 @@ export async function search(msg) {
   return resp;
 }
 export async function publish(msg) {
-  var resp = await axios.post(URL + "user/editor/", msg)
+  var resp = await axios.post(URL + "user/publish/", msg)
   // console.log(resp);
   return resp;
 }

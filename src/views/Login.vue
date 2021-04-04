@@ -106,11 +106,9 @@ export default {
         console.log(v);
         this.loginMsg = v.data.msg;
         if (v.data.code === 0) {
-          var startTime = Date.now();
-          localStorage.setItem("startTime", startTime);
-          this.$store.commit("setUserInfo", v.data.data);
-          this.$store.commit("changeIsLogin", true);
-          // console.log(startTime);
+          var startTime = Date.now()
+          localStorage.setItem('startTime', startTime)
+          this.$store.commit('base/userInfo', v.data.data)
           this.$router.push({
             path: "/",
           });
@@ -120,13 +118,10 @@ export default {
     toRegister() {
       console.log(this.newUserInfo);
       register(this.newUserInfo).then((v) => {
-        console.log(v);
-        this.regMsg = v;
-        if (this.regMsg.code === 0) {
-          this.$router.push({
-            path: "/",
-          });
+        if (v.data.code === 0) {
+          this.changeToLogin()
         }
+        this.$message(v.data.msg)
       });
     },
     changeToLogin() {

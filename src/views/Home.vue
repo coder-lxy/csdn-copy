@@ -34,6 +34,10 @@ export default {
   data() {
     return {
       currentIndex: "",
+      requestData: {
+        page: 1,
+        limit: 10,
+      },
       hotBlogs: [],
       recBlogs: [],
       newestBlogs: [],
@@ -68,8 +72,9 @@ export default {
   methods: {
     getHotBlogList() {
       this.isLoading = true;
+      this.requestData.page = this.hotPage
       // console.log(this.hotBlogs);
-      getHotBlogs(this.hotPage).then((v) => {
+      getHotBlogs(this.requestData).then((v) => {
         this.hotBlogs = this.hotBlogs.concat(v.data);
         this.hotPage++;
         this.isLoading = false;
@@ -77,7 +82,8 @@ export default {
     },
     getRecBlogList() {
       this.isLoading = true;
-      getRec(this.recPage).then((v) => {
+      this.requestData.page = this.recPage
+      getRec(this.requestData).then((v) => {
         this.recBlogs = this.recBlogs.concat(v.data);
         this.recPage++;
         this.isLoading = false;
@@ -85,7 +91,8 @@ export default {
     },
     getNewBlogList() {
       this.isLoading = true;
-      getNewest(this.newPage).then((v) => {
+      this.requestData.page = this.newPage
+      getNewest(this.requestData).then((v) => {
         this.newestBlogs = this.newestBlogs.concat(v.data);
         this.newPage++;
         this.isLoading = false;
@@ -93,7 +100,8 @@ export default {
     },
     getFollowBlogList() {
       this.isLoading = true;
-      getFollow(this.followPage).then((v) => {
+      this.requestData.page = this.followPage
+      getFollow(this.requestData).then((v) => {
         this.followBlogs = this.followBlogs.concat(v.data);
         this.followPage++;
         this.isLoading = false;
@@ -106,12 +114,12 @@ export default {
       if (this.currentIndex === 1) {
         this.getRecBlogList();
       }
-      if (this.currentIndex === 2) {
-        this.getNewBlogList();
-      }
-      if (this.currentIndex === 3) {
-        this.getFollowBlogList();
-      }
+      // if (this.currentIndex === 2) {
+      //   this.getNewBlogList();
+      // }
+      // if (this.currentIndex === 3) {
+      //   this.getFollowBlogList();
+      // }
     },
     handleScroll(e) {
       let scrollTop = e.target.documentElement.scrollTop;
