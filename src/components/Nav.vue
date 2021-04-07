@@ -53,13 +53,13 @@
           </a>
           <div class="msgList">
             <ul>
-              <li @click="lookNoticeDetail(6)">
+              <li @click="toMsgCenter(0)">
                 <a href="javascript:;">
                   公告
                   <em v-show="noticeCount != 0" class="notice">{{noticeCount}}</em>
                 </a>
               </li>
-              <li @click="lookCommentDetail(5)">
+              <li @click="toMsgCenter(1)">
                 <a href="javascript:;">
                   评论
                   <em v-show="commentCount != 0" class="comment">{{
@@ -67,7 +67,7 @@
                   }}</em>
                 </a>
               </li>
-              <li>
+              <li @click="toMsgCenter(2)">
                 <a href>
                   关注
                   <em v-show="followCount != 0" class="follow">{{
@@ -75,18 +75,18 @@
                   }}</em>
                 </a>
               </li>
-              <li @click="lookLikeDetail(4)">
+              <li @click="toMsgCenter(3)">
                 <a href="javascript:;">
                   点赞
                   <em v-show="likeCount != 0" class="like">{{ likeCount }}</em>
                 </a>
               </li>
-              <li>
+              <!-- <li @click="toMsgCenter(index)">
                 <a href>
                   私信
                   <em v-show="sxCount != 0" class="im"></em>
                 </a>
-              </li>
+              </li> -->
             </ul>
           </div>
         </li>
@@ -112,15 +112,8 @@
 </template>
 
 <script>
-import {
-  commentMsg,
-  likeMsg,
-  logout,
-  lookComment,
-  lookLike,
-  getNotice,
-  noticeMsg,
-} from "../services/blogService";
+import { logout} from "../services/blogService";
+import { commentNotice, likeNotice, followNotice } from '@/services/noticeService'
 // import logo from "../assets/logo.png "
 export default {
   data() {
@@ -148,17 +141,30 @@ export default {
   created() {
     this.headUrl =  this.$store.getters['base/userInfo'].headUrl
     this.userId = this.$store.getters['base/userInfo'].userId
-    likeMsg().then((v) => {
-      // console.log(v.data.data.length);
-      this.likeCount = v.data.data;
-      // console.log(this.$store.state.likeList);
-    });
-    commentMsg().then((v) => {
-      this.commentCount = v.data.data;
-      console.log(this.commentCount);
-    });
-    noticeMsg().then(v=>{
-      this.noticeCount=v.data.data
+    // 评论通知
+    commentNotice(this.userId).then(v => {
+      if(v.data.data.count) {
+        this.msgList[1].count = v.data.data.count
+        this.isDot = true
+      }
+      console.log('comment', v)
+
+    })
+    // 点赞通知
+    likeNotice(this.userId).then(v=>{
+      if(v.data.data.count) {
+        this.msgList[3].count = v.data.data.count
+        this.isDot = true
+      }
+      console.log('like', v)
+    })
+    // 关注通知
+    followNotice(this.userId).then(v=> {
+      if(v.data.data.count) {
+        this.msgList[2].count = v.data.data.count
+        this.isDot = true
+      }
+      console.log('follow', v);
     })
   },
   methods: {
@@ -212,37 +218,13 @@ export default {
         },
       })
     },
-    // 查看点赞详情
-    lookLikeDetail(index) {
-      // lookLike().then((v) => {
-      //   this.$store.commit("setLikeList", v.data.data)
-      // });
-      this.likeCount = 0;
-      this.toUserInfo(index)
-    },
-    // 查看评论详情
-    lookCommentDetail(index) {
-      // lookComment().then(v=>{
-      // this.$store.commit("setCommentList", v.data.data);
-      // });
-      // this.$store.commit("changeUserListIndex", index);
-      this.commentCount = 0;
-      this.toUserInfo(index)
-      // this.$router.push({
-      //   path: "/userinfo",
-      // });
-    },
-    lookNoticeDetail(index) {
-      // getNotice().then(v=>{
-      //   console.log(v);
-      // this.$store.commit("setNoticeList", v.data.data);
-      // });
-      // this.$store.commit("changeUserListIndex", index);
-      this.noticeCount = 0
-      this.toUserInfo(index)
-      // this.$router.push({
-      //   path: "/userinfo",
-      // });
+    toMsgCenter(id) {
+      this.$router.push({
+        path: '/msg',
+        query: {
+          id: id,
+        },
+      })
     },
   },
 };

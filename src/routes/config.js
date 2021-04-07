@@ -41,6 +41,12 @@ export default {
       name:"Editor",
       component:()=>import("@/views/Editor")
     },
+    // 消息中心
+    {
+      path: "/msg",
+      name: "Msg",
+      component:()=>import("@/views/message-center/MessageCenter.vue")
+    },
     {
       path: "*", // 匹配所有路径
       name:"NotFound",
