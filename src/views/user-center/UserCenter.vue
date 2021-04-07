@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="main">
-      <AsideProfile :userInfo="userInfo" class="left"></AsideProfile>
-      <UserManage :userId="userInfo.user.userId" class="right"></UserManage>
+      <AsideProfile :userInfo="userInfo" class="left clearfix"></AsideProfile>
+      <UserManage :userId="userInfo.user.userId" class="right clearfix"></UserManage>
     </div>
   </div>
 </template>
@@ -33,7 +33,7 @@ export default {
 
 <style scoped>
 .main {
-  margin-left: 78px;
+  margin-right: 278px;
 }
 .left {
   float: right;

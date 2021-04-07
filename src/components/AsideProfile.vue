@@ -59,6 +59,7 @@
             round
             size="small"
             v-if="userInfo.user.userId !== currentUserId"
+            @click="beFollow"
             >关注</el-button
           ></el-col
         >
@@ -68,10 +69,15 @@
 </template>
 
 <script>
+import { follow } from '../services/blogService';
 export default {
   data() {
     return {
       currentUserId: '',
+      requestData: {
+        userId: '',
+        followUserId: ''
+      }
     }
   },
   props: {
@@ -91,6 +97,13 @@ export default {
         },
       })
     },
+    beFollow() {
+      this.requestData.userId = this.currentUserId
+      this.requestData.followUserId = this.userInfo.user.userId
+      follow(this.requestData).then(v => {
+        console.log(v);
+      })
+    }
   }
 }
 </script>

@@ -16,7 +16,7 @@
 import BlogList from "../components/BlogList";
 import TodayRec from "../components/TodayRec";
 import Loading from "../components/Loading";
-import { getHotBlogs, getTodayRec } from "../services/blogService";
+import { getFollow, getTodayRec } from "../services/blogService";
 export default {
   components: {
     BlogList,
@@ -47,7 +47,7 @@ export default {
   methods: {
     getList() {
       this.isLoading = true;
-      getHotBlogs(this.requestData).then((v) => {
+      getFollow(this.requestData).then((v) => {
         if(v.data.length===0) {
           this.$message('已经到底啦！')
         } else {

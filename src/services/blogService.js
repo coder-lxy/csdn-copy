@@ -47,12 +47,12 @@ export async function getRec(data) {
 }
 // 获取最新发布新闻
 export async function getNewest(page) {
-  var resp = await axios.get(URL + "all/newest/"+ page)
+  var resp = await axios.post(URL + "all/newest/", page)
   return resp.data;
 }
 // 获取关注动态
 export async function getFollow(page) {
-  var resp = await axios.get(URL + "user/follow/"+ page)
+  var resp = await axios.post(URL + "user/follow/", page)
   // console.log(resp);
   return resp.data;
 }
@@ -62,6 +62,7 @@ export async function getTodayRec() {
   // console.log(resp);
   return resp.data;
 }
+// 评论模块
 // 获取评论
 export async function getComment(data) {
   var resp = await axios.post(URL + "all/getCommentVOByBlogId/", data)
@@ -69,7 +70,7 @@ export async function getComment(data) {
 }
 // 发布评论
 export async function pubComment(comment) {
-  var resp = await axios.post(URL + "user/publishcomment/", comment)
+  var resp = await axios.post(URL + "user/addComment/", comment)
   return resp;
 }
 // 删除评论
@@ -92,6 +93,22 @@ export async function getUserNewsList(data) {
 export async function collectList(id) {
   var resp = await axios.get(URL + 'collect/select/' + id) 
     console.log(resp);
+    return resp
+}
+// 关注模块
+// 获取关注列表
+export async function getFollowList(id) {
+  var resp = await axios.get(URL + 'user/selectFollowUserByUserId?userId=' + id) 
+    return resp
+}
+// 获取粉丝列表
+export async function getFansList(id) {
+  var resp = await axios.get(URL + 'user/selectFansByUserId?userId=' + id) 
+    return resp
+}
+// 关注和取消关注
+export async function follow(data) {
+  var resp = await axios.post(URL + 'user/followUser', data) 
     return resp
 }
 export async function edit(data) {

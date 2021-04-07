@@ -3,7 +3,7 @@
     <el-tabs :tab-position="tabPosition">
        <el-tab-pane v-if="userId===currentUserId" label="个人资料"><UserInfo :userId="userId"></UserInfo></el-tab-pane>
       <el-tab-pane label="文章管理"><MyNews :userId="userId"></MyNews></el-tab-pane>
-      <el-tab-pane label="我的关注"><MyFollow /></el-tab-pane>
+      <el-tab-pane label="我的关注"><MyFollow :userId="userId"></MyFollow></el-tab-pane>
       <el-tab-pane label="我的粉丝"><MyFans /></el-tab-pane>
       <el-tab-pane label="我的收藏"><MyCollect :userId="userId"></MyCollect></el-tab-pane>
     </el-tabs>
