@@ -132,7 +132,7 @@ export async function renewal() {
   return resp;
 }
 export async function uploadEditorImg(formData) {
-  var resp = await axios.post(URL + "uploadeditorimage/", formData)
+  var resp = await axios.post(URL + "user/uploadEditorImage", formData)
   // console.log(resp);
   return resp;
 }

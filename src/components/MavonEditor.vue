@@ -16,6 +16,7 @@
 import { mavonEditor } from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
 import { uploadEditorImg } from '../services/blogService';
+import { URL } from "@/services/config";
 export default {
   // 注册
   components: {
@@ -34,15 +35,16 @@ export default {
     $imgAdd(pos, $file) {
       // alert(pos);
       // console.log($file)
+      let postUrl = URL + 'user/uploadEditorImage'
       let formData = new FormData();
 
       formData.append("file",$file);
       uploadEditorImg(formData).then(v=>{
         console.log(v);
-         this.$refs.md.$img2Url(pos, v.data.msg);
+        //  this.$refs.md.$img2Url(pos, v.data.msg);
       })
       // this.$upload
-      //   .post("http://10.101.76.66:8081/uploadeditorimage", formdata)
+      //   .post(postUrl, formdata)
       //   .then((res) => {
       //     console.log(res.data);
       //     this.$refs.md.$img2Url(pos, res.data);
